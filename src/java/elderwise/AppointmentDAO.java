@@ -16,10 +16,7 @@ public class AppointmentDAO {
     private List<Appointment> appointments;
 
     public AppointmentDAO() {
-        
     }
-    
-
     
     public AppointmentDAO(List<Appointment> appointments) {
         this.appointments = appointments;

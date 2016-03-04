@@ -15,6 +15,7 @@ public class Elderly {
     private int mobile;
     private String email;
     private String gender;
-    private NOK nok;
+    private String nokName;
+    private int nokMobile;
     
 }

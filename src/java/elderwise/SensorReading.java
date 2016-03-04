@@ -17,6 +17,24 @@ public class SensorReading {
     private String value;
     
     public SensorReading(){}
+
+    public SensorReading(String sensorId, Date date, String value) {
+        this.sensorId = sensorId;
+        this.date = date;
+        this.value = value;
+    }
+
+    public String getSensorId() {
+        return sensorId;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getValue() {
+        return value;
+    }
     
     
 }

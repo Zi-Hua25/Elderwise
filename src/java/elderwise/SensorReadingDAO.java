@@ -11,7 +11,9 @@ import java.util.List;
  *
  * @author Terence
  */
-public class SensorDAO {
+public class SensorReadingDAO {
+    private static final String GET_ALL = "SELECT * from SensorReading";
+    private static final String GET_LATEST = "SELECT * from SensorReading where date < today";
     private List<SensorReading> sensorReadings;
     
     public SensorReading[] getSensorReadingsFromOneElderly(String name){
@@ -20,5 +22,12 @@ public class SensorDAO {
     
     public SensorReading getOneSensorReadingFromOneElderly(String sensorId, String name){
         return new SensorReading();   //dummy
+    }
+    
+    public void readAllSensorReadings(){}
+    
+    public void readSensorReadingOneDayBefore(){
+        //read all row from all sensor
+        //creates sensor objects and add to list    
     }
 }
