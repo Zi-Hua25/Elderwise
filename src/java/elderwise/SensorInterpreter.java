@@ -6,7 +6,6 @@
 package elderwise;
 
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -17,30 +16,30 @@ import java.util.List;
 //calculations are done PER DAY. results are PER DAY
 public final class SensorInterpreter {
     
-    public static double calculateSleepingHours(){
+    public static double calculateSleepingHours(List<SensorReading> readings){
         return 0; //dumy
     }
-    public static Date[] calculateSleepTimings(){
+    public static Date[] calculateSleepTimings(List<SensorReading> readings){
         return new Date[0];
     }
     
-    public static int calculateSleepDisturbanceCount(){
+    public static int calculateSleepDisturbanceCount(List<SensorReading> readings){
         return 0;
     }
-    public static int calculateStoveCount(){
+    public static int calculateStoveCount(List<SensorReading> readings){
         return 0;
     }
-    public static int calculateFridgeDoorCount(){
+    public static int calculateFridgeDoorCount(List<SensorReading> readings){
         return 0;
     }
-    public static int calculateOutdoorCount(){
+    public static int calculateOutdoorCount(List<SensorReading> readings){
         return 0;
     }
 
-    public static int calculateTotalRoomVisits(){
+    public static int calculateTotalRoomVisits(List<SensorReading> readings){
         return 0;
     }
-    public static int calculateWeight(){
+    public static int calculateWeight(List<SensorReading> readings){
         return 0;
     }
 

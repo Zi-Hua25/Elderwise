@@ -15,9 +15,22 @@ import java.util.List;
 public class ActivityDAO {
     private List<Activity> activities;
     
-    public Activity getElderlyActivityByDate(String name, Date date){
+    public Activity getOneElderlyActivityByDate(Elderly elderly, Date date){
         return new Activity();
     }
+    
+    public List<Activity> getAllActivities(){
+        return activities;
+    }
+
+    
+    public void readAllActivitiesFromDb(){
+    
+    }
+    
+    public void add(Activity activity){
+        activities.add(activity);
+    } 
     
    
 }

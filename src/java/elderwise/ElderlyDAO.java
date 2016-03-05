@@ -14,6 +14,10 @@ import java.util.List;
 public class ElderlyDAO {
     
     private List<Elderly> elderlies;
+    
+    public ElderlyDAO(){
+        readAllElderlyFromDb();
+    }
 
     public List<Elderly> getElderlies() {
         return elderlies;
@@ -21,6 +25,18 @@ public class ElderlyDAO {
     
     public Elderly getElderly(String name){
         return new Elderly(); //dummy
+    }
+    
+    public void readAllElderlyFromDb(){
+    
+    }
+    
+    public void add(Elderly e){
+        elderlies.add(e);
+    }
+    
+    public void update(Elderly e){
+        
     }
     
     

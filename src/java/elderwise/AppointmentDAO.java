@@ -16,6 +16,7 @@ public class AppointmentDAO {
     private List<Appointment> appointments;
 
     public AppointmentDAO() {
+        readAllAppointmentsFromDb();
     }
     
     public AppointmentDAO(List<Appointment> appointments) {
@@ -23,5 +24,17 @@ public class AppointmentDAO {
     }
     public Appointment getAppointment(Date date, Elderly elderly){
         return new Appointment();    //dummy
+    }
+    
+    public List<Appointment> getAllAppointments(){
+        return appointments;
+    }
+    
+    public void readAllAppointmentsFromDb(){
+    
+    }
+    
+    public void add(Appointment a){
+        appointments.add(a);
     }
 }

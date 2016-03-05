@@ -5,6 +5,7 @@
  */
 package elderwise;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,18 +17,28 @@ public class SensorReadingDAO {
     private static final String GET_LATEST = "SELECT * from SensorReading where date < today";
     private List<SensorReading> sensorReadings;
     
-    public SensorReading[] getSensorReadingsFromOneElderly(String name){
+    public SensorReadingDAO(){
+        readAllSensorReadingsFromDb();
+    }
+    
+    public SensorReading[] getSensorReadingsOnDate(List<Sensor> sensor, Date date){
+        //sensors are sensors that belong to one elderly. logic in app controller
         return new SensorReading[0]; //dummy
     }
     
-    public SensorReading getOneSensorReadingFromOneElderly(String sensorId, String name){
+    public SensorReading getOneSensorReadingOnDate(Sensor sensor, Date date){
+        //sensors are sensors that belong to one elderly. logic in app controller
         return new SensorReading();   //dummy
     }
     
-    public void readAllSensorReadings(){}
+    public void readAllSensorReadingsFromDb(){}
     
-    public void readSensorReadingOneDayBefore(){
-        //read all row from all sensor
-        //creates sensor objects and add to list    
+    public void readSensorReadingFromDbOnDate(Date dates){
+        
     }
+    
+    public void add(SensorReading sr){
+        sensorReadings.add(sr);
+    }
+    
 }
