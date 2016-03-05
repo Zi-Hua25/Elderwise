@@ -10,6 +10,7 @@ package elderwise;
  * @author Terence
  */
 public class Elderly {
+    private String id;
     private String name;
     private int age;
     private int mobile;
@@ -27,7 +28,8 @@ public class Elderly {
    
     }
 
-    public Elderly(String name, int age, int mobile, String email, String gender, String nokName, int nokMobile, String risk) {
+    public Elderly(String id, String name, int age, int mobile, String email, String gender, String nokName, int nokMobile, String risk) {
+        this.id = id;
         this.name = name;
         this.age = age;
         this.mobile = mobile;
@@ -38,6 +40,10 @@ public class Elderly {
         this.risk = risk;
     }
 
+    public String getId(){
+        return id;
+    }
+    
     public String getName() {
         return name;
     }

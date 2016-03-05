@@ -5,7 +5,7 @@
  */
 package elderwise;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -19,8 +19,8 @@ public final class SensorInterpreter {
     public static double calculateSleepingHours(List<SensorReading> readings){
         return 0; //dumy
     }
-    public static Date[] calculateSleepTimings(List<SensorReading> readings){
-        return new Date[0];
+    public static Calendar[] calculateSleepTimings(List<SensorReading> readings){
+        return new Calendar[0];
     }
     
     public static int calculateSleepDisturbanceCount(List<SensorReading> readings){

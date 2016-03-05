@@ -23,8 +23,13 @@ public class ElderlyDAO {
         return elderlies;
     }
     
-    public Elderly getElderly(String name){
-        return new Elderly(); //dummy
+    public Elderly getElderly(String id){
+        for (Elderly e: elderlies){
+            if (e.getId().equals(id)){
+                return e;
+            }
+        }
+        return null;
     }
     
     public void readAllElderlyFromDb(){

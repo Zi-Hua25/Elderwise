@@ -25,6 +25,7 @@ public class BidDAO {
     private static final String SELECT_BID = "SELECT * from bid where courseCode = ? AND sectionCode = ? AND userId = ?";
     private static final String SELECT_BID_BY_SECTION = "SELECT * from bid where courseCode = ? AND sectionCode=?";
 
+    /*
     public ArrayList<Bid> retrieveAll() {
 
         ArrayList<Bid> bids = new ArrayList<Bid>();
@@ -253,4 +254,5 @@ public class BidDAO {
         }
         return bids;
     }
+    */
 }

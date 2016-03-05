@@ -11,20 +11,20 @@ package elderwise;
  */
 public class Sensor {
     
-    private String id;
-    private Elderly elderly;
+    private String sensorId;
+    private String elderlyId;
 
-    public Sensor(String id, Elderly elderly) {
-        this.id = id;
-        this.elderly = elderly;
+    public Sensor(String sensorId, String elderlyId) {
+        this.sensorId = sensorId;
+        this.elderlyId = elderlyId;
     }
 
-    public String getId() {
-        return id;
+    public String getSensorId() {
+        return sensorId;
     }
 
-    public Elderly getElderly() {
-        return elderly;
+    public String getElderlyId() {
+        return elderlyId;
     }
     
     

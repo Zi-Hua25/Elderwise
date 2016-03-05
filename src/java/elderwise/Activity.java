@@ -5,7 +5,7 @@
  */
 package elderwise;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -16,9 +16,9 @@ import java.util.List;
 public class Activity {
     
     private Elderly elderly;
-    private Date date;
+    private Calendar date;
 
-    private Date[] sleepingTimes;
+    private Calendar[] sleepingTimes;
     
     private Hashtable<String, List<Object>> activityTable;
     
@@ -32,7 +32,7 @@ public class Activity {
     //a1: sleeping hours
     //a2: ...
     
-    public Date[] getSleepingTimes(){
+    public Calendar[] getSleepingTimes(){
         return sleepingTimes;
     }
     
@@ -43,7 +43,7 @@ public class Activity {
         return elderly;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 

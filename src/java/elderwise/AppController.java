@@ -26,9 +26,11 @@ public final class AppController {
 
     public AppController() {
         //take note of order
-        sensorDAO = new SensorDAO();
-        doctorDAO = new DoctorDAO();
+        
+        
         elderlyDAO = new ElderlyDAO();
+        doctorDAO = new DoctorDAO();
+        sensorDAO = new SensorDAO();
         sensorReadingDAO = new SensorReadingDAO();
         appointmentDAO = new AppointmentDAO();
         caregiverDAO = new CaregiverDAO();

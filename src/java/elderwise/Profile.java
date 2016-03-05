@@ -5,7 +5,7 @@
  */
 package elderwise;
 
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  *
@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class Profile {
     
-    private Date date;
+    private Calendar date;
     private double[] sleepingHours;
     //private Date[] sleepingTimes; //difficult
     private double[] sleepDisturbance;
@@ -25,7 +25,7 @@ public class Profile {
 
     public Profile(){}
 
-    public Profile(Date date, double[] sleepingHours, double[] sleepDisturbance, 
+    public Profile(Calendar date, double[] sleepingHours, double[] sleepDisturbance, 
             double[] numTimesFridgeDoorOpen, double[] numTimesOutdoor, 
             double[] numTimesStoveUsed, double[] totalRoomVisits, double[] weight) {
         this.date = date;
@@ -39,7 +39,7 @@ public class Profile {
     }
     
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 

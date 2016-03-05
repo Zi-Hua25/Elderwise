@@ -5,10 +5,18 @@
  */
 package elderwise;
 
+import java.util.Calendar;
+
 /**
  *
  * @author Terence
  */
-public class SymptomDAO {
+public class Elderwise {
+    
+    public static void main(String[] args){
+        //AppController app = new AppController();
+    }
+        
+      
     
 }

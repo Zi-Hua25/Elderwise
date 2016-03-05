@@ -5,7 +5,7 @@
  */
 package elderwise;
 
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  *
@@ -13,12 +13,12 @@ import java.util.Date;
  */
 public class SensorReading {
     private String sensorId;
-    private Date date;
+    private Calendar date;
     private String value;
     
     public SensorReading(){}
 
-    public SensorReading(String sensorId, Date date, String value) {
+    public SensorReading(String sensorId, Calendar date, String value) {
         this.sensorId = sensorId;
         this.date = date;
         this.value = value;
@@ -28,7 +28,7 @@ public class SensorReading {
         return sensorId;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 

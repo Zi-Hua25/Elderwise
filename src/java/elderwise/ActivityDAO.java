@@ -5,29 +5,25 @@
  */
 package elderwise;
 
-import java.util.Date;
-import java.util.List;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 /**
  *
  * @author Terence
  */
 public class ActivityDAO {
-    private List<Activity> activities;
+
+    private ArrayList<Activity> activities;
     
-    public Activity getOneElderlyActivityByDate(Elderly elderly, Date date){
+    public Activity getOneElderlyActivityByDate(Elderly elderly, Calendar date){
         return new Activity();
     }
     
-    public List<Activity> getAllActivities(){
+    public ArrayList<Activity> getAllActivities(){
         return activities;
     }
 
-    
-    public void readAllActivitiesFromDb(){
-    
-    }
-    
     public void add(Activity activity){
         activities.add(activity);
     } 

@@ -5,7 +5,7 @@
  */
 package elderwise;
 
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  *
@@ -14,11 +14,11 @@ import java.util.Date;
 public class Appointment {
     private Elderly elderly;
     private Doctor doctor;
-    private Date date;
+    private Calendar date;
 
     public Appointment(){}
     
-    public Appointment(Elderly elderly, Doctor doctor, Date date) {
+    public Appointment(Elderly elderly, Doctor doctor, Calendar date) {
         this.elderly = elderly;
         this.doctor = doctor;
         this.date = date;
@@ -32,7 +32,7 @@ public class Appointment {
         return doctor;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
     
