@@ -10,17 +10,18 @@ package elderwise;
  * @author Terence
  */
 public class Doctor {
-    private String name;
+    
     private String username;
     private String password;
-
+    private String name;
+    
     public Doctor(){
     }
     
-    public Doctor(String name, String username, String password) {
-        this.name = name;
+    public Doctor(String username, String password, String name) {
         this.username = username;
         this.password = password;
+        this.name = name;
     }
       
     public String getName(){

@@ -15,7 +15,7 @@ public class Profile {
     
     private Calendar date;
     private double[] sleepingHours;
-    //private Date[] sleepingTimes; //difficult
+    //private Calendar[] sleepingTimes; //difficult
     private double[] sleepDisturbance;
     private double[] numTimesFridgeDoorOpen;
     private double[] numTimesOutdoor;

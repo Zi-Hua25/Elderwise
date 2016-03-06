@@ -12,24 +12,24 @@ import java.util.Calendar;
  * @author Terence
  */
 public class Appointment {
-    private Elderly elderly;
-    private Doctor doctor;
+    private String elderlyId;
+    private String doctorId;
     private Calendar date;
 
     public Appointment(){}
-    
-    public Appointment(Elderly elderly, Doctor doctor, Calendar date) {
-        this.elderly = elderly;
-        this.doctor = doctor;
+
+    public Appointment(String elderlyId, String doctorId, Calendar date) {
+        this.elderlyId = elderlyId;
+        this.doctorId = doctorId;
         this.date = date;
     }
-    
-    public Elderly getElderly(){
-        return elderly;
+
+    public String getElderlyId() {
+        return elderlyId;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public String getDoctorId() {
+        return doctorId;
     }
 
     public Calendar getDate() {

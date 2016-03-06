@@ -5,9 +5,9 @@
  */
 package elderwise;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
-import java.util.List;
 
 /**
  *
@@ -20,7 +20,7 @@ public class Activity {
 
     private Calendar[] sleepingTimes;
     
-    private Hashtable<String, List<Object>> activityTable;
+    private Hashtable<String, ArrayList<Object>> activityTable;
     
     //each hashtable contains a key, which is like the 'id' of the activity
     //value will be a array of 3 values that describes the activity
@@ -60,19 +60,19 @@ public class Activity {
     }
     
     public void setSleepingHours(int hours){
-        List<Object> values = activityTable.get("a1");
+        ArrayList<Object> values = activityTable.get("a1");
         values.set(0, hours);
         activityTable.put("a1", values);
     }
     
     public void setSleepingHoursPercentChange(double percentChange){
-        List<Object> values = activityTable.get("a1");
+        ArrayList<Object> values = activityTable.get("a1");
         values.set(1, percentChange);
         activityTable.put("a1", values);
     }
     
     public void setSleepingHoursAbnormally(boolean abnormal){
-        List<Object> values = activityTable.get("a1");
+        ArrayList<Object> values = activityTable.get("a1");
         values.set(2, abnormal);
         activityTable.put("a1", values);
     }

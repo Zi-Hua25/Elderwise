@@ -77,7 +77,7 @@ public class SensorReadingDAO {
         } finally {
             ConnectionManager.close(conn, pst, rs);
         }
-    
+        System.out.println("sensorr reading dao ok");
     }
     
 

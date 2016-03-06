@@ -59,6 +59,7 @@ public class SensorDAO {
         } finally {
             ConnectionManager.close(conn, pst, rs);
         }
+        System.out.println("sensor dao ok");
     }
     
 }

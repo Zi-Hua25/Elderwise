@@ -12,12 +12,18 @@ import java.io.InputStream;
  * @author Terence
  */
 public class ConnectionManager {
-    private static String JDBC_DRIVER = "jdbc.driver";
+    /*private static String JDBC_DRIVER = "jdbc.driver";
     private static String JDBC_URL = "jdbc.url";
     private static String JDBC_USER = "jdbc.user";
     private static String JDBC_PASSWORD = "jdbc.password";
-    private static Properties props = new Properties();
+    private static Properties props = new Properties();*/
+    
+    private static final String url = "jdbc:mysql://localhost/elderwisedb";
+    private static final String username = "root";
+    private static final String password = "password";
 
+    /*
+    
     static {
         try {
             // a way to retrieve the data in
@@ -35,6 +41,9 @@ public class ConnectionManager {
         }
     }
 
+    */
+    
+    
     /**
      * Gets a connection to the database
      *
@@ -42,9 +51,8 @@ public class ConnectionManager {
      * @throws SQLException if an error occurs when connecting
      */
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(props.getProperty(JDBC_URL),
-                props.getProperty(JDBC_USER),
-                props.getProperty(JDBC_PASSWORD));
+        
+        return DriverManager.getConnection(url,username, password);
     }
 
     /**

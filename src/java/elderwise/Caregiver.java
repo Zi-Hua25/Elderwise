@@ -5,7 +5,7 @@
  */
 package elderwise;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,14 +13,17 @@ import java.util.List;
  */
 public class Caregiver {
     
-    private String name;
+
     private String username;
     private String password;
-    private List<Elderly> elderlies;
+    private String name;
+    private ArrayList<String> elderlyIds;
 
     public Caregiver(){}
     
-    public Caregiver(String name, String username, String password) {
+    public Caregiver(String username, String password, String name) {
+        this.username = username;
+        this.password = password;
         this.name = name;
     }
 
@@ -36,8 +39,8 @@ public class Caregiver {
         return password;
     }
 
-    public List<Elderly> getElderlies() {
-        return elderlies;
+    public ArrayList<String> getElderlyIds() {
+        return elderlyIds;
     }
 
     

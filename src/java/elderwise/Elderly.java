@@ -87,5 +87,15 @@ public class Elderly {
     public void setRisk(String risk){
         this.risk = risk;
     }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public void setSymptom(Symptom symptom) {
+        this.symptom = symptom;
+    }
+    
+    
     
 }

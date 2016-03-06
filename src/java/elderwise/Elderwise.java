@@ -5,6 +5,8 @@
  */
 package elderwise;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Calendar;
 
 /**
@@ -13,8 +15,9 @@ import java.util.Calendar;
  */
 public class Elderwise {
     
-    public static void main(String[] args){
-        //AppController app = new AppController();
+    public static void main(String[] args) throws SQLException{
+        
+        AppController app = new AppController();
     }
         
       

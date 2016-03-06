@@ -34,7 +34,7 @@ public final class AppController {
         sensorReadingDAO = new SensorReadingDAO();
         appointmentDAO = new AppointmentDAO();
         caregiverDAO = new CaregiverDAO();
-        activityDAO = new ActivityDAO();
+        //activityDAO = new ActivityDAO();
 
     }
     
