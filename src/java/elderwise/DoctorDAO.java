@@ -5,10 +5,16 @@
  */
 package elderwise;
 
+import com.opencsv.CSVReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
@@ -18,9 +24,53 @@ import java.util.Hashtable;
 public class DoctorDAO {
     private static final String GET_ALL = "SELECT * from Doctor";
     private Hashtable<String, Doctor> doctors;
+    private static final File folder = new File("files/doctor");
+    public DoctorDAO() throws IOException{
+        //readAllDoctorsFromDb();
+        System.out.println("\n--------------------------");
+        doctors = new Hashtable<String, Doctor>();
+        readAllDocotorsFromCSV();
+    }
     
-    public DoctorDAO(){
-        readAllDoctorsFromDb();
+    public void readAllDocotorsFromCSV() throws FileNotFoundException, IOException{
+        ArrayList<String> fileNames = new ArrayList<String>();
+        System.out.println("\nDetecting doctor files...");
+        for (final File fileEntry : folder.listFiles()) {
+            fileNames.add(fileEntry.getName());
+            System.out.println(fileEntry.getName());
+        }
+        System.out.println("Detecting doctor files complete!");
+        System.out.println("\nRemoving unwanted files..");
+        fileNames.remove(".DS_Store");
+        System.out.println(".DS_Store removed!");
+        System.out.println("Removal complete!");
+        if (fileNames.size() != 1) {
+            System.out.println("Invalid number of files. Please try again.");
+        } else {
+            System.out.println("\nreading " + fileNames.get(0) + " ....");
+            Long start = System.currentTimeMillis();
+            CSVReader reader = new CSVReader(new FileReader(folder + "/" + fileNames.get(0)));
+            String[] nextLine;
+            boolean firstRow = true;
+            
+            while ((nextLine = reader.readNext()) != null) {
+                if (!firstRow) {
+                    Doctor d = new Doctor(nextLine[0], nextLine[1], nextLine[2]);
+                    doctors.put(d.getUsername(), d);
+                } else {
+                    firstRow = false;
+                }
+            }
+            //testing
+            Long end = System.currentTimeMillis();
+            Long diff = end - start;
+            System.out.println("finished reading");
+            System.out.println("time taken: " + diff / 1000.00 + " seconds");
+        }
+        
+        System.out.println("\nTotal " + doctors.size() + " doctos read");
+        
+    
     }
     
     public Doctor getOneDoctor(String username){
@@ -30,7 +80,7 @@ public class DoctorDAO {
     public Hashtable<String, Doctor> getDoctors(){
         return doctors;
     }
-    
+    /*
     public void readAllDoctorsFromDb(){
         Connection conn = null;
         PreparedStatement pst = null;
@@ -53,4 +103,5 @@ public class DoctorDAO {
         System.out.println("doctor dao ok");
     }
     
+    */
 }

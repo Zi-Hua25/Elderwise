@@ -18,29 +18,50 @@ import java.util.ArrayList;
 public final class SensorInterpreter {
     
 
-    public static Calendar[] calculateSleepTimings(ArrayList<SensorReading> readings){
-        return new Calendar[0];
+    public static ArrayList<Calendar[]> calculateSleepTimings(ArrayList<SensorReading> readings){
+        Calendar[] sleepingTime = new Calendar[2];
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        sleepingTime[0] = start;
+        sleepingTime[1] = end;
+        ArrayList<Calendar[]> sleepingTimes = new ArrayList<Calendar[]>();
+        sleepingTimes.add(sleepingTime);
+        return sleepingTimes;
     }
     
-    public static int calculateSleepDisturbanceCount(ArrayList<SensorReading> readings){
-        return 0;
+    public static ArrayList<Calendar[]> calculateSleepDisturbances(ArrayList<SensorReading> readings){
+        //return when woke up when disturbed, and when sleep back
+        Calendar[] sleepingTime = new Calendar[2];
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        sleepingTime[0] = start;
+        sleepingTime[1] = end;
+        ArrayList<Calendar[]> sleepingTimes = new ArrayList<Calendar[]>();
+        sleepingTimes.add(sleepingTime);
+        return sleepingTimes;
     }
-    public static int calculateStoveCount(ArrayList<SensorReading> readings){
-        return 0;
-    }
-    public static int calculateFridgeDoorCount(ArrayList<SensorReading> readings){
-        return 0;
-    }
-    public static int calculateOutdoorCount(ArrayList<SensorReading> readings){
-        return 0;
+   
+    public static ArrayList<Calendar[]> calculateOutdoorCount(ArrayList<SensorReading> readings){
+        //return when go out, when come back
+        Calendar[] sleepingTime = new Calendar[2];
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        sleepingTime[0] = start;
+        sleepingTime[1] = end;
+        ArrayList<Calendar[]> sleepingTimes = new ArrayList<Calendar[]>();
+        sleepingTimes.add(sleepingTime);
+        return sleepingTimes;
     }
 
-    public static int calculateTotalRoomVisits(ArrayList<SensorReading> readings){
-        return 0;
+    public static int[] calculateTotalRoomVisits(ArrayList<SensorReading> readings){
+        //[0] =
+        //[1] =
+        //[2] =
+        //[3] =
+        int[] rooms = new int[4];
+        return rooms;
     }
-    public static int calculateWeight(ArrayList<SensorReading> readings){
-        return 0;
-    }
+    
 
     
 }

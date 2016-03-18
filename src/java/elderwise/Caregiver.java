@@ -25,6 +25,7 @@ public class Caregiver {
         this.username = username;
         this.password = password;
         this.name = name;
+        elderlyIds = new ArrayList<String>();
     }
 
     public String getName() {
@@ -42,6 +43,12 @@ public class Caregiver {
     public ArrayList<String> getElderlyIds() {
         return elderlyIds;
     }
+
+    public void setElderlyIds(ArrayList<String> elderlyIds) {
+        this.elderlyIds = elderlyIds;
+    }
+    
+    
 
     
     

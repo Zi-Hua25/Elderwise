@@ -33,7 +33,8 @@ public final class AppController {
         bootstrap();
         
         Long end = System.currentTimeMillis();
-        System.out.println("\nbootstrap ended. Time taken: " + ((end-start)/1000.00) + " seconds.");
+        System.out.println("\n--------------------------");
+        System.out.println("bootstrap ended. Time taken: " + ((end-start)/1000.00) + " seconds.");
         
 
     }
@@ -44,12 +45,14 @@ public final class AppController {
         sensorDAO = new SensorDAO();
         sensorReadingDAO = new SensorReadingDAO(sensorDAO);
         
+        caregiverDAO = new CaregiverDAO();
+        doctorDAO = new DoctorDAO();
+        
+        
+        
         //use sensor intepreter to populate activity class
         //interpretReadings();
-        
-        
-        //doctorDAO = new DoctorDAO();
-        
+
         //read activities and assign to elderly
         //activityDAO = new ActivityDAO();
         
@@ -59,7 +62,7 @@ public final class AppController {
         //appointmentDAO = new AppointmentDAO();
         
         //populate caregiver with elderly ids
-        //caregiverDAO = new CaregiverDAO();
+        
         
         
         //check for abnormally for all dates after say first 2-week, change activity class

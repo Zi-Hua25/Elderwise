@@ -140,7 +140,7 @@ public class SensorReadingDAO {
                             if (elderlyTable.containsKey(currentDateReadCal)){
                                 ArrayList<SensorReading> readingList = elderlyTable.get(currentDateReadCal);
                                 readingList.add(s);
-                                elderlyTable.put(currentDateReadCal, readingList);
+                                //elderlyTable.put(currentDateReadCal, readingList);
                             } else {
                                 ArrayList<SensorReading> newReadingList = new ArrayList<SensorReading>();
                                 newReadingList.add(s);
@@ -169,7 +169,7 @@ public class SensorReadingDAO {
 
         }
         
-        System.out.println("\nTotal " + sensorReadingTable.size() + " elderlies read");
+        System.out.println("\nTotal " + sensorReadingTable.size() + " sensor reading read");
 
     }
 
