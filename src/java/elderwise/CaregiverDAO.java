@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
 
@@ -19,6 +20,7 @@ import java.util.Hashtable;
 public class CaregiverDAO {
     
     private static final String GET_ALL = "SELECT * from Caregiver";
+    private static final String GET_ALL_ASSIGNMENT = "SELECT * from Assignment";
     private Hashtable<String, Caregiver> caregivers;
     
     public CaregiverDAO(){
@@ -44,11 +46,12 @@ public class CaregiverDAO {
             rs = pst.executeQuery();
             while (rs.next()) {
                 Calendar date = Calendar.getInstance();
-                date.setTime(rs.getDate(2));
-                Caregiver cg = new Caregiver(rs.getString(0), rs.getString(1), rs.getString(2));
+                date.setTime(rs.getDate(3));
+                Caregiver cg = new Caregiver(rs.getString(1), rs.getString(2), rs.getString(4));
                 cgList.put(cg.getUsername(), cg);
             }
             caregivers = cgList;
+            System.out.println(caregivers);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -57,7 +60,27 @@ public class CaregiverDAO {
         System.out.println("caregiver dao ok");
         
         
-        //read from assigmnet db also
+        conn = null;
+        pst = null;
+        rs = null;
+        try {
+            conn = ConnectionManager.getConnection();
+            pst = conn.prepareStatement(GET_ALL_ASSIGNMENT);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                String caregiverId = rs.getString(1);
+                System.out.println(caregivers);
+                Caregiver cg = caregivers.get(caregiverId);
+                ArrayList<String> elderlyIds = cg.getElderlyIds();
+                elderlyIds.add(rs.getString(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionManager.close(conn, pst, rs);
+        }
+        
+        System.out.println("assignment caregiver elderly ok");
 
     }
 }

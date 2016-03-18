@@ -15,13 +15,13 @@ import java.util.Hashtable;
  */
 public class Activity {
     
-    private Elderly elderly;
+    private String activityId;
+    private String elderlyId;
     private Calendar date;
+    private String value;
 
-    private Calendar[] sleepingTimes;
-    
-    private Hashtable<String, ArrayList<Object>> activityTable;
-    
+    //private Calendar[] sleepingTimes;
+  
     //each hashtable contains a key, which is like the 'id' of the activity
     //value will be a array of 3 values that describes the activity
     //[0] will be the absolute value
@@ -29,56 +29,31 @@ public class Activity {
     //[2] will be a boolean of whether [0] is an abnormally
 
     //ids of activity
-    //a1: sleeping hours
-    //a2: ...
-    
-    public Calendar[] getSleepingTimes(){
-        return sleepingTimes;
+    //a1: count of 4 PIR sensors / day (S111-S114)
+    //a2: count of magnetic fridge / day (S116)
+    //a3: count of temperature stove / day (S117)
+    //a4: duration at which elderly is out (S115)
+    //a5: weight of person (S118, almost constant pressure for 30 mins and variance low, get average, convert to kg)
+    //a6: what time sleep (S118)
+    //a7: what time wake up (S118)
+    //a8: duration he sleeps (S118)
+    //a9: sleep disturbances (S118), calculate mean of the 30 mins that determine he is asleep. 2XSD is upper and lower. 
+    //    find outliers. determines disturbances (every consecutive outlier is 1 disturbance).
+
+    public Activity(String activityId, String elderlyId, Calendar date, String value) {
+        this.activityId = activityId;
+        this.elderlyId = elderlyId;
+        this.date = date;
+        this.value = value;
     }
     
-    public Activity(){
-    }
     
-    public Elderly getElderly() {
-        return elderly;
-    }
+    
 
     public Calendar getDate() {
         return date;
     }
 
-    public int getSleepingHours(){
-        return (Integer)activityTable.get("a1").get(0);
-    }
-    
-    public double getSleepingHoursPercentChange(){
-        return (Double)activityTable.get("a1").get(1);
-    }
-    
-    public boolean getSleepingHoursAbnormally(){
-        return (Boolean)activityTable.get("a1").get(2);
-    }
-    
-    public void setSleepingHours(int hours){
-        ArrayList<Object> values = activityTable.get("a1");
-        values.set(0, hours);
-        activityTable.put("a1", values);
-    }
-    
-    public void setSleepingHoursPercentChange(double percentChange){
-        ArrayList<Object> values = activityTable.get("a1");
-        values.set(1, percentChange);
-        activityTable.put("a1", values);
-    }
-    
-    public void setSleepingHoursAbnormally(boolean abnormal){
-        ArrayList<Object> values = activityTable.get("a1");
-        values.set(2, abnormal);
-        activityTable.put("a1", values);
-    }
-
-    
-    
     
     
             

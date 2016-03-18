@@ -5,8 +5,11 @@
  */
 package elderwise;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Calendar;
 
 /**
@@ -15,7 +18,7 @@ import java.util.Calendar;
  */
 public class Elderwise {
     
-    public static void main(String[] args) throws SQLException{
+    public static void main(String[] args) throws SQLException, IOException, FileNotFoundException, ParseException{
         
         AppController app = new AppController();
     }

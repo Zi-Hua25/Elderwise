@@ -1,5 +1,10 @@
 package elderwise;
 
+import com.opencsv.CSVReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,9 +26,11 @@ public class ElderlyDAO {
     
     private static final String GET_ALL = "SELECT * from Elderly";
     private Hashtable<String, Elderly> elderlies;
-    
-    public ElderlyDAO(){
-        readAllElderlyFromDb();
+    private static final File folder = new File("files/elderly");
+    public ElderlyDAO() throws IOException{
+        System.out.println("\n--------------------------");
+        elderlies = new Hashtable<String, Elderly>();
+        readAllElderlyFromCSV();
     }
 
     public Hashtable<String, Elderly> getElderlies() {
@@ -34,7 +41,47 @@ public class ElderlyDAO {
         return elderlies.get(id);
     }
     
-    public void readAllElderlyFromDb(){
+    public void readAllElderlyFromCSV() throws FileNotFoundException, IOException{
+        ArrayList<String> fileNames = new ArrayList<String>();
+        System.out.println("\nDetecting elderly files...");
+        for (final File fileEntry : folder.listFiles()) {
+            fileNames.add(fileEntry.getName());
+            System.out.println(fileEntry.getName());
+        }
+        System.out.println("Detecting elderly files complete!");
+        System.out.println("\nRemoving unwanted files..");
+        fileNames.remove(".DS_Store");
+        System.out.println(".DS_Store removed!");
+        System.out.println("Removal complete!");
+        if (fileNames.size() != 1) {
+            System.out.println("Invalid number of file. Please try again.");
+        } else {
+            System.out.println("\nreading " + fileNames.get(0) + " ....");
+            Long start = System.currentTimeMillis();
+            CSVReader reader = new CSVReader(new FileReader(folder + "/" + fileNames.get(0)));
+            String[] nextLine;
+            boolean firstRow = true;
+            while ((nextLine = reader.readNext()) != null) {
+                if (!firstRow) {
+                    Elderly e = new Elderly(nextLine[0], nextLine[1], Integer.parseInt(nextLine[2]), 
+                            Integer.parseInt(nextLine[3]),nextLine[4], nextLine[5],nextLine[6], 
+                            Integer.parseInt(nextLine[7]), nextLine[8]);
+                    elderlies.put(e.getId(),e);
+                } else {
+                    firstRow = false;
+                }
+            }
+            //testing
+            Long end = System.currentTimeMillis();
+            Long diff = end - start;
+            System.out.println("finished reading");
+            System.out.println("time taken: " + diff / 1000.00 + " seconds");
+        }
+        System.out.println("\nTotal " + elderlies.size() + " elderlies read");
+    
+    }
+    
+    /*public void readAllElderlyFromDb(){
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -44,9 +91,9 @@ public class ElderlyDAO {
             pst = conn.prepareStatement(GET_ALL);
             rs = pst.executeQuery();
             while (rs.next()) {
-                Elderly elderly = new Elderly(rs.getString(0), rs.getString(1), rs.getInt(2), 
-                        rs.getInt(3), rs.getString(4), rs.getString(5), rs.getString(6), 
-                        rs.getInt(7), rs.getString(8));
+                Elderly elderly = new Elderly(rs.getString(1), rs.getString(2), rs.getInt(3), 
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7), 
+                        rs.getInt(8), rs.getString(9));
                 elds.put(elderly.getId(), elderly);
                  
             }
@@ -58,12 +105,10 @@ public class ElderlyDAO {
         }
         System.out.println("elderly dao ok");
     }
+    */
     
     
     
-    public void update(Elderly e){
-        
-    }
     
     
 }

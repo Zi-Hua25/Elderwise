@@ -6,7 +6,7 @@
 package elderwise;
 
 import java.util.Calendar;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,32 +14,31 @@ import java.util.List;
  */
 
 //calculations are done PER DAY. results are PER DAY
+//is to interpret excel values
 public final class SensorInterpreter {
     
-    public static double calculateSleepingHours(List<SensorReading> readings){
-        return 0; //dumy
-    }
-    public static Calendar[] calculateSleepTimings(List<SensorReading> readings){
+
+    public static Calendar[] calculateSleepTimings(ArrayList<SensorReading> readings){
         return new Calendar[0];
     }
     
-    public static int calculateSleepDisturbanceCount(List<SensorReading> readings){
+    public static int calculateSleepDisturbanceCount(ArrayList<SensorReading> readings){
         return 0;
     }
-    public static int calculateStoveCount(List<SensorReading> readings){
+    public static int calculateStoveCount(ArrayList<SensorReading> readings){
         return 0;
     }
-    public static int calculateFridgeDoorCount(List<SensorReading> readings){
+    public static int calculateFridgeDoorCount(ArrayList<SensorReading> readings){
         return 0;
     }
-    public static int calculateOutdoorCount(List<SensorReading> readings){
+    public static int calculateOutdoorCount(ArrayList<SensorReading> readings){
         return 0;
     }
 
-    public static int calculateTotalRoomVisits(List<SensorReading> readings){
+    public static int calculateTotalRoomVisits(ArrayList<SensorReading> readings){
         return 0;
     }
-    public static int calculateWeight(List<SensorReading> readings){
+    public static int calculateWeight(ArrayList<SensorReading> readings){
         return 0;
     }
 

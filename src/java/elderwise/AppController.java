@@ -1,5 +1,8 @@
 package elderwise;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
 import org.apache.commons.math3.stat.descriptive.*;
 
 
@@ -21,24 +24,60 @@ public final class AppController {
     private AppointmentDAO appointmentDAO;
     private ActivityDAO activityDAO;
     private SensorDAO sensorDAO;
-
     
 
-    public AppController() {
+    public AppController() throws IOException, FileNotFoundException, ParseException {
         //take note of order
+        Long start = System.currentTimeMillis();
+        System.out.println("\nsystem started. bootstrap starting.....");
+        bootstrap();
         
+        Long end = System.currentTimeMillis();
+        System.out.println("\nbootstrap ended. Time taken: " + ((end-start)/1000.00) + " seconds.");
         
-        elderlyDAO = new ElderlyDAO();
-        doctorDAO = new DoctorDAO();
-        sensorDAO = new SensorDAO();
-        sensorReadingDAO = new SensorReadingDAO();
-        appointmentDAO = new AppointmentDAO();
-        caregiverDAO = new CaregiverDAO();
-        //activityDAO = new ActivityDAO();
 
     }
     
     
+    public void bootstrap() throws IOException, FileNotFoundException, ParseException{
+        elderlyDAO = new ElderlyDAO();
+        sensorDAO = new SensorDAO();
+        sensorReadingDAO = new SensorReadingDAO(sensorDAO);
+        
+        //use sensor intepreter to populate activity class
+        //interpretReadings();
+        
+        
+        //doctorDAO = new DoctorDAO();
+        
+        //read activities and assign to elderly
+        //activityDAO = new ActivityDAO();
+        
+        //create profile using maybe first 2-weeks of data
+        //createProfiles();
+        
+        //appointmentDAO = new AppointmentDAO();
+        
+        //populate caregiver with elderly ids
+        //caregiverDAO = new CaregiverDAO();
+        
+        
+        //check for abnormally for all dates after say first 2-week, change activity class
+        //checkAbnormally();
+        
+        //check for symptoms across all dates after say first-week, change elderly class
+        //checkSymptom();
+        
+        
+        
+        
+        
+
+    }
+    
+    public static void interpretReadings(){
+    
+    }
     
     public static void createProfiles(){
         // take 1st 2-weeks data to create profile using Calculator class
@@ -59,7 +98,7 @@ public final class AppController {
         //do necessary updates
     }
     
-    public void check(){
+    public void checkSymptom(){
         //check if abnormally persist for 14 days
         //each abnormally have equal weight to identify 1 symptom
     }

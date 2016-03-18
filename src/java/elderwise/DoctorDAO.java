@@ -41,7 +41,7 @@ public class DoctorDAO {
             pst = conn.prepareStatement(GET_ALL);
             rs = pst.executeQuery();
             while (rs.next()) {
-                Doctor doc = new Doctor(rs.getString(0), rs.getString(1), rs.getString(2));
+                Doctor doc = new Doctor(rs.getString(1), rs.getString(2), rs.getString(3));
                 docs.put(doc.getUsername(), doc);
             }
             doctors = docs;

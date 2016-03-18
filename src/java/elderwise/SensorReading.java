@@ -5,7 +5,13 @@
  */
 package elderwise;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,14 +20,22 @@ import java.util.Calendar;
 public class SensorReading {
     private String sensorId;
     private Calendar date;
-    private String value;
-    
-    public SensorReading(){}
+    private String doorContact;
+    private String livingRoomPIR;
+    private String bedRoomPIR;
+    private String bed;
+    private String bathroomPIR;
+    private String kitchenPIR;
 
-    public SensorReading(String sensorId, Calendar date, String value) {
+    public SensorReading(String sensorId, Calendar date, String doorContact, String livingRoomPIR, String bedRoomPIR, String bed, String bathroomPIR, String kitchenPIR) {
         this.sensorId = sensorId;
         this.date = date;
-        this.value = value;
+        this.doorContact = doorContact;
+        this.livingRoomPIR = livingRoomPIR;
+        this.bedRoomPIR = bedRoomPIR;
+        this.bed = bed;
+        this.bathroomPIR = bathroomPIR;
+        this.kitchenPIR = kitchenPIR;
     }
 
     public String getSensorId() {
@@ -32,9 +46,31 @@ public class SensorReading {
         return date;
     }
 
-    public String getValue() {
-        return value;
+    public String getDoorContact() {
+        return doorContact;
     }
+
+    public String getLivingRoomPIR() {
+        return livingRoomPIR;
+    }
+
+    public String getBedRoomPIR() {
+        return bedRoomPIR;
+    }
+
+    public String getBed() {
+        return bed;
+    }
+
+    public String getBathroomPIR() {
+        return bathroomPIR;
+    }
+
+    public String getKitchenPIR() {
+        return kitchenPIR;
+    }
+
+
     
     
 }

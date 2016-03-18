@@ -48,8 +48,8 @@ public class AppointmentDAO {
             rs = pst.executeQuery();
             while (rs.next()) {
                 Calendar date = Calendar.getInstance();
-                date.setTime(rs.getDate(2));
-                Appointment apt = new Appointment(rs.getString(0), rs.getString(1), date);
+                date.setTime(rs.getDate(3));
+                Appointment apt = new Appointment(rs.getString(1), rs.getString(2), date);
                 aptList.add(apt);
             }
             appointments = aptList;
