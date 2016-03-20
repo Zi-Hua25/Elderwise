@@ -31,7 +31,6 @@ public class SensorDAO {
 
     private static final String GET_ALL = "SELECT * from Sensor";
     private ArrayList<Sensor> sensors;
-    private static final File folder = new File("files/sensor");
 
     public SensorDAO() throws IOException {
         System.out.println("\n--------------------------");
@@ -43,6 +42,8 @@ public class SensorDAO {
     }
 
     public void readAllSensorsFromCSV() throws FileNotFoundException, IOException {
+        String url = Thread.currentThread().getContextClassLoader().getResource("../files/sensor").getPath();
+        File folder = new File(url); 
         ArrayList<String> fileNames = new ArrayList<String>();
         System.out.println("\nDetecting sensor files...");
         for (final File fileEntry : folder.listFiles()) {

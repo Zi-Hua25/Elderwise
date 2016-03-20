@@ -17,25 +17,56 @@ import java.util.logging.Logger;
  *
  * @author Terence
  */
-public class SensorReading {
+public class SensorReading implements Comparable<SensorReading>{
+
     private String sensorId;
     private Calendar date;
-    private String doorContact;
-    private String livingRoomPIR;
-    private String bedRoomPIR;
-    private String bed;
-    private String bathroomPIR;
-    private String kitchenPIR;
+    private boolean doorContact;
+    private boolean livingRoomPIR;
+    private boolean bedRoomPIR;
+    private boolean bed;
+    private boolean bathroomPIR;
+    private boolean kitchenPIR;
 
     public SensorReading(String sensorId, Calendar date, String doorContact, String livingRoomPIR, String bedRoomPIR, String bed, String bathroomPIR, String kitchenPIR) {
         this.sensorId = sensorId;
         this.date = date;
-        this.doorContact = doorContact;
-        this.livingRoomPIR = livingRoomPIR;
-        this.bedRoomPIR = bedRoomPIR;
-        this.bed = bed;
-        this.bathroomPIR = bathroomPIR;
-        this.kitchenPIR = kitchenPIR;
+        if (doorContact.equals("Yes")) {
+            this.doorContact = true;
+        } else {
+            this.doorContact = false;
+        }
+
+        if (livingRoomPIR.equals("Yes")) {
+            this.livingRoomPIR = true;
+        } else {
+            this.livingRoomPIR = false;
+        }
+
+        if (bedRoomPIR.equals("Yes")) {
+            this.bedRoomPIR = true;
+        } else {
+            this.bedRoomPIR = false;
+        }
+
+        if (bed.equals("Yes")) {
+            this.bed = true;
+        } else {
+            this.bed = false;
+        }
+
+        if (bathroomPIR.equals("Yes")) {
+            this.bathroomPIR = true;
+        } else {
+            this.bathroomPIR = false;
+        }
+
+        if (kitchenPIR.equals("Yes")) {
+            this.kitchenPIR = true;
+        } else {
+            this.kitchenPIR = false;
+        }
+
     }
 
     public String getSensorId() {
@@ -43,34 +74,44 @@ public class SensorReading {
     }
 
     public Calendar getDate() {
+
         return date;
     }
 
-    public String getDoorContact() {
+    public boolean getDoorContact() {
         return doorContact;
     }
 
-    public String getLivingRoomPIR() {
+    public boolean getLivingRoomPIR() {
         return livingRoomPIR;
     }
 
-    public String getBedRoomPIR() {
+    public boolean getBedRoomPIR() {
         return bedRoomPIR;
     }
 
-    public String getBed() {
+    public boolean getBed() {
         return bed;
     }
 
-    public String getBathroomPIR() {
+    public boolean getBathroomPIR() {
         return bathroomPIR;
     }
 
-    public String getKitchenPIR() {
+    public boolean getKitchenPIR() {
         return kitchenPIR;
     }
 
+    @Override
+    public int compareTo(SensorReading reading) {
 
-    
-    
+        if (date.getTime().before(reading.getDate().getTime())) {
+            return -1;
+        }
+        if (date.getTime().after(reading.getDate().getTime())) {
+            return 1;
+        }
+        return 0;
+    }
+
 }

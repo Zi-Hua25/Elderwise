@@ -16,6 +16,8 @@ public final class SymptomCalculator {
     private static final int minPeriodSleepingHours = 10;
     
     
+    //for insomnia. only need abnormally for sleep disturbance and sleep duration
+    
 
     public boolean calculateInsomnia(){
         //check for abnormallies that is present in difference activities

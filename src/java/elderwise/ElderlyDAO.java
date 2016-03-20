@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ public class ElderlyDAO {
     
     private static final String GET_ALL = "SELECT * from Elderly";
     private Hashtable<String, Elderly> elderlies;
-    private static final File folder = new File("files/elderly");
+   // private static final File folder = new File("files/elderly");
     public ElderlyDAO() throws IOException{
         System.out.println("\n--------------------------");
         elderlies = new Hashtable<String, Elderly>();
@@ -42,9 +43,13 @@ public class ElderlyDAO {
     }
     
     public void readAllElderlyFromCSV() throws FileNotFoundException, IOException{
+        String url = Thread.currentThread().getContextClassLoader().getResource("../files/elderly").getPath();
+        File folder = new File(url); 
+
         ArrayList<String> fileNames = new ArrayList<String>();
         System.out.println("\nDetecting elderly files...");
-        for (final File fileEntry : folder.listFiles()) {
+        for (File fileEntry : folder.listFiles()) {
+            System.out.println("hihi");
             fileNames.add(fileEntry.getName());
             System.out.println(fileEntry.getName());
         }

@@ -27,8 +27,6 @@ public class CaregiverDAO {
     private static final String GET_ALL = "SELECT * from Caregiver";
     private static final String GET_ALL_ASSIGNMENT = "SELECT * from Assignment";
     private Hashtable<String, Caregiver> caregivers;
-    private static final File caregiverFolder = new File("files/caregiver");
-    private static final File assignmentFolder = new File("files/assignment");
     
     public CaregiverDAO() throws IOException{
         //readAllCaregiversFromDb();
@@ -39,6 +37,9 @@ public class CaregiverDAO {
     }
     
     public void readAllCaregiverFromCSV() throws FileNotFoundException, IOException{
+        String url = Thread.currentThread().getContextClassLoader().getResource("../files/caregiver").getPath();
+        File caregiverFolder = new File(url); 
+        
         ArrayList<String> fileNames = new ArrayList<String>();
         System.out.println("\nDetecting caregiver files...");
         for (final File fileEntry : caregiverFolder.listFiles()) {
@@ -77,6 +78,9 @@ public class CaregiverDAO {
     }
     
     public void readAllCaregiverAssignmentFromCSV() throws FileNotFoundException, IOException{
+        String url = Thread.currentThread().getContextClassLoader().getResource("../files/assignment").getPath();
+        File assignmentFolder = new File(url);
+        
         ArrayList<String> fileNames = new ArrayList<String>();
         System.out.println("\nDetecting caregiver asssignment files...");
         for (final File fileEntry : assignmentFolder.listFiles()) {

@@ -24,7 +24,6 @@ import java.util.Hashtable;
 public class DoctorDAO {
     private static final String GET_ALL = "SELECT * from Doctor";
     private Hashtable<String, Doctor> doctors;
-    private static final File folder = new File("files/doctor");
     public DoctorDAO() throws IOException{
         //readAllDoctorsFromDb();
         System.out.println("\n--------------------------");
@@ -33,6 +32,9 @@ public class DoctorDAO {
     }
     
     public void readAllDocotorsFromCSV() throws FileNotFoundException, IOException{
+        String url = Thread.currentThread().getContextClassLoader().getResource("../files/doctor").getPath();
+        File folder = new File(url); 
+        
         ArrayList<String> fileNames = new ArrayList<String>();
         System.out.println("\nDetecting doctor files...");
         for (final File fileEntry : folder.listFiles()) {

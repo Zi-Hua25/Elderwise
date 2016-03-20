@@ -3,6 +3,9 @@ package elderwise;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import org.apache.commons.math3.stat.descriptive.*;
 
 
@@ -17,13 +20,13 @@ import org.apache.commons.math3.stat.descriptive.*;
  */
 public final class AppController {
 
-    private ElderlyDAO elderlyDAO;
-    private DoctorDAO doctorDAO;
-    private CaregiverDAO caregiverDAO;
-    private SensorReadingDAO sensorReadingDAO;
-    private AppointmentDAO appointmentDAO;
-    private ActivityDAO activityDAO;
-    private SensorDAO sensorDAO;
+    private static ElderlyDAO elderlyDAO;
+    private static DoctorDAO doctorDAO;
+    private static CaregiverDAO caregiverDAO;
+    private static SensorReadingDAO sensorReadingDAO;
+    private static AppointmentDAO appointmentDAO;
+    private static ActivityDAO activityDAO;
+    private static SensorDAO sensorDAO;
     
 
     public AppController() throws IOException, FileNotFoundException, ParseException {
@@ -48,8 +51,10 @@ public final class AppController {
         caregiverDAO = new CaregiverDAO();
         doctorDAO = new DoctorDAO();
         
+        Calendar date = Calendar.getInstance();
+        date.set(2015, 9, 1, 0, 0, 0);
         
-        
+        SensorInterpreter.calculateSleepTimings(AppController.getOneDayReadingForElderly(date, "E001"));
         //use sensor intepreter to populate activity class
         //interpretReadings();
 
@@ -79,7 +84,21 @@ public final class AppController {
     }
     
     public static void interpretReadings(){
+        
+        System.out.println("\n--------------------------");
+        System.out.println("starting to interpret readings...");
+        Long start = System.currentTimeMillis();
+        
+        
+        
+        
+        Long end = System.currentTimeMillis();
+        System.out.println("\n--------------------------");
+        System.out.println("interpretting ended. Time taken: " + ((end-start)/1000.00) + " seconds.");
+    }
     
+    public static ArrayList<SensorReading> getOneDayReadingForElderly(Calendar date, String elderlyId) throws ParseException{
+        return sensorReadingDAO.getSensorReadingsOnDates(elderlyId, date);
     }
     
     public static void createProfiles(){

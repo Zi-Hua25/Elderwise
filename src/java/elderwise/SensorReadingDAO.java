@@ -35,37 +35,47 @@ public class SensorReadingDAO {
     private static final String GET_ALL = "SELECT * from SensorReading";
     //private static final String GET_LATEST = "SELECT * from SensorReading where date >= ? and date < ?";
     private static final int START_TIME_OF_DAY = 10;
-    private static final File folder = new File("files/readings");
     private ArrayList<SensorReading> sensorReadings;
     //first key is the elderly, second key is the date, without time
-    private Hashtable<String, Hashtable<Calendar, ArrayList<SensorReading>> > sensorReadingTable;
+    private Hashtable<String, Hashtable<String, ArrayList<SensorReading>> > sensorReadingTable;
     private SensorDAO sensorDAO;
 
     public SensorReadingDAO(SensorDAO sensorDAO) throws IOException, FileNotFoundException, ParseException {
         System.out.println("\n--------------------------");
         sensorReadings = new ArrayList<SensorReading>();
-        sensorReadingTable = new Hashtable<String, Hashtable<Calendar, ArrayList<SensorReading>>>();
+        sensorReadingTable = new Hashtable<String, Hashtable<String, ArrayList<SensorReading>>>();
         this.sensorDAO = sensorDAO;
         readAllSensorReadingsFromCSV(); 
 
     }
 
-    public ArrayList<SensorReading> getSensorReadingsOnDates(String elderlyId, Calendar date) {
+    public ArrayList<SensorReading> getSensorReadingsOnDates(String elderlyId, Calendar date) throws ParseException {
         if (sensorReadingTable.containsKey(elderlyId)){
-            Hashtable elderlyTable = sensorReadingTable.get(elderlyId);
-            if (elderlyTable.containsKey(date)){
-                ArrayList<SensorReading> readings = (ArrayList<SensorReading>) elderlyTable.get(date);
+            Hashtable<String, ArrayList<SensorReading>> elderlyTable = sensorReadingTable.get(elderlyId);
+            DateFormat format = new SimpleDateFormat("yyMMdd");
+            String dateToCheck = format.format(date.getTime());
+            //System.out.println(dateToCheck + " to check");
+            //for (String key: elderlyTable.keySet()){
+              //  System.out.println(key);
+            //}
+            if (elderlyTable.containsKey(dateToCheck)){
+                ArrayList<SensorReading> readings = (ArrayList<SensorReading>) elderlyTable.get(dateToCheck);
+               // System.out.println("found");
                 return readings;
             } else {
+                //System.out.println("never found");
                 return null;
             }
-        } 
+        }
+        System.out.println("ohereereeee");
         return null;
     }
     public Hashtable<Calendar,ArrayList<SensorReading>> getSensorReadingsOnDates(String elderlyId, Calendar start, Calendar end) {
         if (sensorReadingTable.containsKey(elderlyId)){
+            
             Hashtable<Calendar, ArrayList<SensorReading>> readingOnDates = new Hashtable<Calendar, ArrayList<SensorReading>>();
-            Hashtable<Calendar, ArrayList<SensorReading>> elderlyTable = sensorReadingTable.get(elderlyId);
+            Hashtable<String, ArrayList<SensorReading>> elderlyTable = sensorReadingTable.get(elderlyId);
+            
             if (elderlyTable.containsKey(start) && elderlyTable.containsKey(end)){
                 while (start.before(end) || start.equals(end)){
                     readingOnDates.put(start, elderlyTable.get(start));
@@ -75,7 +85,8 @@ public class SensorReadingDAO {
             } else {
                 return null;
             }
-        } 
+        }
+
         return null;
     }
 
@@ -85,7 +96,8 @@ public class SensorReadingDAO {
      return new SensorReading();   //dummy
      }*/
     public void readAllSensorReadingsFromCSV() throws FileNotFoundException, IOException, ParseException {
-
+        String url = Thread.currentThread().getContextClassLoader().getResource("../files/readings").getPath();
+        File folder = new File(url); 
         ArrayList<String> fileNames = new ArrayList<String>();
         System.out.println("\nDetecting sensor reading files...");
         for (final File fileEntry : folder.listFiles()) {
@@ -111,8 +123,8 @@ public class SensorReadingDAO {
                 }
             }
             if (!(elderlyId.equals(""))) {
-                Hashtable<Calendar, ArrayList<SensorReading>> elderlyTable
-                        = new Hashtable<Calendar, ArrayList<SensorReading>>();
+                Hashtable<String, ArrayList<SensorReading>> elderlyTable
+                        = new Hashtable<String, ArrayList<SensorReading>>();
                 if (sensorReadingTable.contains(elderlyId)){
                     elderlyTable = sensorReadingTable.get(elderlyId);
                 }
@@ -124,27 +136,32 @@ public class SensorReadingDAO {
                 while ((nextLine = reader.readNext()) != null) {
                     if (!firstRow) {
                         try {
-                            DateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                            DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                             String dateRead = nextLine[1];
                             Date date = format.parse(dateRead);
                             Calendar dateCal = Calendar.getInstance();
                             dateCal.setTime(date);
-                            format = new SimpleDateFormat("dd/MM/yyyy");
-                            currentDateRead = format.parse(dateRead);
-                            Calendar currentDateReadCal = Calendar.getInstance();
-                            currentDateReadCal.setTime(currentDateRead);
+                            
+                            format = new SimpleDateFormat("yyMMdd");
+                            
+                            String dateToCheck = format.format(date);
+                            
+                           
+                            //System.out.println(dateToCheck + " < date to check");
+                            //Calendar currentDateReadCal = Calendar.getInstance();
+                            //currentDateReadCal.setTime(currentDateRead);
                             
                             SensorReading s = new SensorReading(nextLine[0], dateCal, 
                                     nextLine[2], nextLine[3], nextLine[4], nextLine[5], 
                                     nextLine[6], nextLine[7]);
-                            if (elderlyTable.containsKey(currentDateReadCal)){
-                                ArrayList<SensorReading> readingList = elderlyTable.get(currentDateReadCal);
+                            if (elderlyTable.containsKey(dateToCheck)){
+                                ArrayList<SensorReading> readingList = elderlyTable.get(dateToCheck);
                                 readingList.add(s);
                                 //elderlyTable.put(currentDateReadCal, readingList);
                             } else {
                                 ArrayList<SensorReading> newReadingList = new ArrayList<SensorReading>();
                                 newReadingList.add(s);
-                                elderlyTable.put(currentDateReadCal, newReadingList);
+                                elderlyTable.put(dateToCheck, newReadingList);
                             }
                         } catch (ParseException ex) {
                             System.out.println("error parsing date");
