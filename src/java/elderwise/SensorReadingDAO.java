@@ -39,14 +39,20 @@ public class SensorReadingDAO {
     //first key is the elderly, second key is the date, without time
     private Hashtable<String, Hashtable<String, ArrayList<SensorReading>> > sensorReadingTable;
     private SensorDAO sensorDAO;
+    private ArrayList<String> filesNamesRead;
 
     public SensorReadingDAO(SensorDAO sensorDAO) throws IOException, FileNotFoundException, ParseException {
         System.out.println("\n--------------------------");
         sensorReadings = new ArrayList<SensorReading>();
         sensorReadingTable = new Hashtable<String, Hashtable<String, ArrayList<SensorReading>>>();
         this.sensorDAO = sensorDAO;
+        filesNamesRead = new ArrayList<String>();
         readAllSensorReadingsFromCSV(); 
 
+    }
+     
+    public Hashtable<String, Hashtable<String, ArrayList<SensorReading>>> getAllReadings(){
+        return sensorReadingTable;
     }
 
     public ArrayList<SensorReading> getSensorReadingsOnDates(String elderlyId, Calendar date) throws ParseException {
@@ -112,6 +118,7 @@ public class SensorReadingDAO {
         //read CSV file, populate sensor reading dao
         //one file is one elderly for one month (assuming)
         for (String filename : fileNames) {
+            filesNamesRead.add(filename);
             System.out.println("\nreading " + filename + " ....");
             Long start = System.currentTimeMillis();
             String[] splittedValues = filename.split("_");
@@ -136,7 +143,8 @@ public class SensorReadingDAO {
                 while ((nextLine = reader.readNext()) != null) {
                     if (!firstRow) {
                         try {
-                            DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            //DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                             String dateRead = nextLine[1];
                             Date date = format.parse(dateRead);
                             Calendar dateCal = Calendar.getInstance();
@@ -190,6 +198,9 @@ public class SensorReadingDAO {
 
     }
 
+    public ArrayList<String> getFilesNamesRead(){
+        return filesNamesRead;
+    }
     /*public void readAllSensorReadingsFromDb(){
 
      Connection conn = null;

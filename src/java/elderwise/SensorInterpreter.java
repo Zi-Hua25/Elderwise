@@ -40,7 +40,6 @@ public final class SensorInterpreter {
         //id a7 = timings spent in bathroom
 
         String testLog = "_";
-        testLog += "<br><br>-------------------------------------------<br><br>";
         Hashtable<String, ArrayList<Calendar[]>> allActivityTable
                 = new Hashtable<String, ArrayList<Calendar[]>>();
 
@@ -343,6 +342,8 @@ public final class SensorInterpreter {
                     readingsToCheck.add(readings.get(j));
                 }
             }
+            
+            
 
             //do psychomotor checking only if this period last for > 30 minutes (assumption)
             if (!readingsToCheck.isEmpty()) {
@@ -358,12 +359,19 @@ public final class SensorInterpreter {
                 }
 
                 boolean change = false;
+                
                 boolean kitchen = false;
                 boolean living = false;
                 boolean bath = false;
                 boolean room = false;
+                //[0] = kitchen
+                //[1] = living
+                //[2] = bath
+                //[3] = room
+                boolean[] moveCompare = new boolean[4];
+                
                 ArrayList<Integer> movementCounts = new ArrayList<Integer>();
-                int moveCountPerHour = 0;
+                int moveCountPerHalfHour = 0;
                 //time marked is the date that is read
                 Date timeMarked = new Date();
                 //timeCheck is 1/2 hours later
@@ -373,23 +381,11 @@ public final class SensorInterpreter {
                 for (int i = 0; i < cleanedReadings.size(); i++) {
                     SensorReading sr = cleanedReadings.get(i);
                     Calendar calTimeCheck = Calendar.getInstance();
-
-                    if (i == 0) {
-                        timeMarked.setTime(sr.getDate().getTimeInMillis());
-                        calTimeCheck.setTime(timeMarked);
-                        calTimeCheck.add(Calendar.MINUTE, 30);
-                        timeCheck.setTime(calTimeCheck.getTimeInMillis());
-                    } else {
-                        //check if readings go past half hour mark
-                        if (sr.getDate().getTime().after(timeCheck)) {
-                            timeMarked.setTime(sr.getDate().getTimeInMillis());
-                            calTimeCheck.setTime(timeMarked);
-                            calTimeCheck.add(Calendar.MINUTE, 30);
-                            timeCheck.setTime(calTimeCheck.getTimeInMillis());
-                            moveCountPerHour = 0;
-                        }
-                    }
-                    
+                    change = false;
+                    kitchen = false;
+                    living = false;
+                    bath = false;
+                    room = false;
                     
                     int count = 0;
                     if (sr.getBathroomPIR()) {
@@ -408,6 +404,10 @@ public final class SensorInterpreter {
                         living = true;
                         count++;
                     }
+
+                    //to make only a true
+                    //assumption 2 is max count
+                    //to do: incorporate first row and last row difference
                     if (count > 1) {
                         SensorReading next = cleanedReadings.get(i + 1);
                         boolean kitchen2 = false;
@@ -439,14 +439,80 @@ public final class SensorInterpreter {
                         if (kitchen == kitchen2) {
                             kitchen = false;
                         }
-
-                    } else { //count ==1
-                    
                     }
-                }
-            }
-        }
+                    
+                    
+                    if (i == 0) {
+                        timeMarked.setTime(sr.getDate().getTimeInMillis());
+                        calTimeCheck.setTime(timeMarked);
+                        calTimeCheck.add(Calendar.MINUTE, 30);
+                        timeCheck.setTime(calTimeCheck.getTimeInMillis());
+                        moveCompare[0] = kitchen;
+                        moveCompare[1] = living;
+                        moveCompare[2] = bath;
+                        moveCompare[3] = room;
+                    } else {
+                        //check if readings go past half hour mark
+                        if (sr.getDate().getTime().after(timeCheck)) {
+                            testLog += "<br>from " + timeMarked.toString()+ " to " + 
+                                    timeCheck.toString() + "  --> move count per this half hour: " + moveCountPerHalfHour;
+                            
+                            timeMarked.setTime(sr.getDate().getTimeInMillis());
+                            calTimeCheck.setTime(timeMarked);
+                            calTimeCheck.add(Calendar.MINUTE, 30);
+                            timeCheck.setTime(calTimeCheck.getTimeInMillis());
+                            movementCounts.add(moveCountPerHalfHour);
+                            moveCountPerHalfHour = 0;
+                        }
+                        
+                        change = false;
+                        //only kitchen is true
+                        if (moveCompare[0]){
+                            if (kitchen != moveCompare[0]){
+                                moveCountPerHalfHour++;
+                                change = true;
+                            }
+                        }
+                        //only living room is true
+                        if (moveCompare[1]){
+                            if (living != moveCompare[1]){
+                                moveCountPerHalfHour++;
+                                change = true;
+                            }
+                        }
+                        //only bathroom is true
+                        if (moveCompare[2]){
+                            if (bath != moveCompare[2]){
+                                moveCountPerHalfHour++;
+                                change = true;
+                            }
+                        }
+                        //only bedroom is true
+                        if (moveCompare[3]){
+                            if (room != moveCompare[3]){
+                                moveCountPerHalfHour++;
+                                change = true;
+                            }
+                        }
+                        
+                        if (change){
+                            moveCompare[0] = kitchen;
+                            moveCompare[1] = living;
+                            moveCompare[2] = bath;
+                            moveCompare[3] = room;
+                        }
+                        
+                    }
 
+                    
+                    //there should be only 1 true from here onwards
+                    //testLog += "<br>" + sr.getDate().getTime() + " --> " + living + " , " + room + " , " + kitchen + " , " + bath;
+
+                } // end for loop
+               
+            }// end if
+        }
+        testLog += "<br><br>-------------------------------------------<br><br>";
         allActivityTable.put(testLog, new ArrayList<Calendar[]>());
         return allActivityTable;
     }

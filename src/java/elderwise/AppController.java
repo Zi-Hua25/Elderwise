@@ -83,17 +83,14 @@ public final class AppController {
 
     }
     
-    public static Hashtable<String, ArrayList<Calendar[]>> interpretReadings() throws ParseException{
+    public static Hashtable<String, ArrayList<Calendar[]>> interpretReadings(Calendar date, String elderlyId) throws ParseException{
         
         System.out.println("\n--------------------------");
         System.out.println("starting to interpret readings...");
         Long start = System.currentTimeMillis();
         
-        Calendar date = Calendar.getInstance();
-        date.set(2015, 9, 1, 0, 0, 0);
-        Hashtable<String, ArrayList<Calendar[]>> test = SensorInterpreter.analyzeReadings(AppController.getOneDayReadingForElderly(date, "E001"));
-        
-        
+        Hashtable<String, ArrayList<Calendar[]>> test = SensorInterpreter.analyzeReadings(AppController.getOneDayReadingForElderly(date, elderlyId));
+
         Long end = System.currentTimeMillis();
         System.out.println("\n--------------------------");
         System.out.println("interpretting ended. Time taken: " + ((end-start)/1000.00) + " seconds.");
@@ -102,6 +99,14 @@ public final class AppController {
     
     public static ArrayList<SensorReading> getOneDayReadingForElderly(Calendar date, String elderlyId) throws ParseException{
         return sensorReadingDAO.getSensorReadingsOnDates(elderlyId, date);
+    }
+    
+    public static ArrayList<String> getSensorReadingFilesRead(){
+        return sensorReadingDAO.getFilesNamesRead();
+    }
+    
+    public static Hashtable<String, Hashtable<String, ArrayList<SensorReading>> >getAllSensorReadings(){
+        return sensorReadingDAO.getAllReadings();
     }
     
     public static void createProfiles(){
