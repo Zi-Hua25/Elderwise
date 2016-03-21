@@ -21,11 +21,23 @@
     </head>
     <body>
         <%
-        AppController app = new AppController();
-        Calendar date = Calendar.getInstance();
-        date.set(2015, 9, 1, 0, 0, 0);
-        ArrayList<SensorReading> readings = app.getOneDayReadingForElderly(date, "E001");
-        out.println(readings.size() + "<br>");
+            ArrayList<SensorReading> readings = new ArrayList<SensorReading>();
+                
+            if (session.getAttribute("loggedin") == null){
+                AppController.bootstrap();
+                Calendar date = Calendar.getInstance();
+                date.set(2015, 9, 2, 0, 0, 0);
+                
+                readings = AppController.getOneDayReadingForElderly(date, "E001");
+                out.println(readings.size() + "<br>");
+                session.setAttribute("loggedin", true);
+            } else {
+                Calendar date = Calendar.getInstance();
+                date.set(2015, 9, 2, 0, 0, 0);
+                readings = AppController.getOneDayReadingForElderly(date, "E001");
+                out.println(readings.size() + "<br>");
+            }
+        
         %> 
         <table width = 60%>
             <tr>

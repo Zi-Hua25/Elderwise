@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Hashtable;
 
 /**
@@ -29,7 +30,7 @@ public final class SensorInterpreter {
     //if sleeping and if other PIR sensor got reading, means he left bed
     //if woken up > 30 mins, means woken up
     //if woken up < 30 mins, means sleep disturbance
-    public static ArrayList<Calendar[]> calculateSleepTimings(ArrayList<SensorReading> readings) {
+    public static Hashtable<String, ArrayList<Calendar[]>> analyzeReadings(ArrayList<SensorReading> readings) {
         //id a1 = sleeping timings
         //id a2 = sleep disturbances timings
         //id a3 = out of home timings
@@ -38,11 +39,11 @@ public final class SensorInterpreter {
         //id a6 = timings spent in kitchen
         //id a7 = timings spent in bathroom
 
-        Hashtable<String, ArrayList<Calendar[]>> activityTable
+        String testLog = "_";
+        testLog += "<br><br>-------------------------------------------<br><br>";
+        Hashtable<String, ArrayList<Calendar[]>> allActivityTable
                 = new Hashtable<String, ArrayList<Calendar[]>>();
 
-        Calendar[] sleepDisturbances = new Calendar[2];
-        Calendar[] outTime = new Calendar[2];
         ArrayList<Calendar[]> sleepTimesList = new ArrayList<Calendar[]>();
         ArrayList<Calendar[]> outTimesList = new ArrayList<Calendar[]>();
 
@@ -73,13 +74,13 @@ public final class SensorInterpreter {
                         recorded = true;
                     }
                 }
-                
+
                 if (!recorded) {
                     int awakeOrInOccurence = findAwakeOrInOccurence(readings, i);
-                    
+
                     //cannot find any changedOccurence because reach end of file
                     //need to check whether it is sleep or out
-                    if (awakeOrInOccurence == readings.size()){
+                    if (awakeOrInOccurence == readings.size()) {
                         Integer[] rowRefs = new Integer[2];
                         Calendar[] sleepTime = new Calendar[2];
                         Calendar startime = Calendar.getInstance();
@@ -93,48 +94,49 @@ public final class SensorInterpreter {
                         sleepTime[0] = startime;
                         sleepTime[1] = endTime;
                         sleepTimesList.add(sleepTime);
-                        System.out.println("Sleep from " + sleepTime[0].getTime() + " to " + sleepTime[1].getTime());
+                        testLog += "<br>Sleep from " + sleepTime[0].getTime() + " to " + sleepTime[1].getTime();
 
                     } else if (awakeOrInOccurence != -1) {
                         //assumption that sleep and go out only count if there are 
                         //200 consistent rows (around 30 mins time)
+                        //need to change from 200 rows to 30 mins in the future
                         if (awakeOrInOccurence - i > 200) {
                             //if (i != 0) {
-                                SensorReading changedReading = readings.get(awakeOrInOccurence);
-                                if (changedReading.getDoorContact()) {
-                                    Integer[] rowRefs = new Integer[2];
-                                    Calendar[] outTiming = new Calendar[2];
-                                    Calendar outStart = Calendar.getInstance();
-                                    outStart.setTime(sr.getDate().getTime());
-                                    rowRefs[0] = i;
+                            SensorReading changedReading = readings.get(awakeOrInOccurence);
+                            if (changedReading.getDoorContact()) {
+                                Integer[] rowRefs = new Integer[2];
+                                Calendar[] outTiming = new Calendar[2];
+                                Calendar outStart = Calendar.getInstance();
+                                outStart.setTime(sr.getDate().getTime());
+                                rowRefs[0] = i;
 
-                                    SensorReading end = readings.get(awakeOrInOccurence - 1);
-                                    rowRefs[1] = awakeOrInOccurence - 1;
-                                    sleepAndOutRowReference.add(rowRefs);
+                                SensorReading end = readings.get(awakeOrInOccurence - 1);
+                                rowRefs[1] = awakeOrInOccurence - 1;
+                                sleepAndOutRowReference.add(rowRefs);
 
-                                    Calendar outEnd = Calendar.getInstance();
-                                    outEnd.setTime(end.getDate().getTime());
-                                    outTiming[0] = outStart;
-                                    outTiming[1] = outEnd;
-                                    outTimesList.add(outTiming);
-                                    System.out.println("Go Out from " + outTiming[0].getTime() + " to " + outTiming[1].getTime());
-                                } else {
-                                    Integer[] rowRefs = new Integer[2];
-                                    Calendar[] sleepTime = new Calendar[2];
-                                    Calendar sleepStart = Calendar.getInstance();
-                                    sleepStart.setTime(sr.getDate().getTime());
-                                    rowRefs[0] = i;
-                                    SensorReading end = readings.get(awakeOrInOccurence - 1);
-                                    rowRefs[1] = awakeOrInOccurence - 1;
-                                    sleepAndOutRowReference.add(rowRefs);
-                                    Calendar sleepEnd = Calendar.getInstance();
-                                    sleepEnd.setTime(end.getDate().getTime());
-                                    sleepTime[0] = sleepStart;
-                                    sleepTime[1] = sleepEnd;
-                                    sleepTimesList.add(sleepTime);
-                                    System.out.println("Sleep from " + sleepTime[0].getTime() + " to " + sleepTime[1].getTime());
-                                }
+                                Calendar outEnd = Calendar.getInstance();
+                                outEnd.setTime(end.getDate().getTime());
+                                outTiming[0] = outStart;
+                                outTiming[1] = outEnd;
+                                outTimesList.add(outTiming);
+                                testLog += "<br>Go Out from " + outTiming[0].getTime() + " to " + outTiming[1].getTime();
+                            } else {
+                                Integer[] rowRefs = new Integer[2];
+                                Calendar[] sleepTime = new Calendar[2];
+                                Calendar sleepStart = Calendar.getInstance();
+                                sleepStart.setTime(sr.getDate().getTime());
+                                rowRefs[0] = i;
+                                SensorReading end = readings.get(awakeOrInOccurence - 1);
+                                rowRefs[1] = awakeOrInOccurence - 1;
+                                sleepAndOutRowReference.add(rowRefs);
+                                Calendar sleepEnd = Calendar.getInstance();
+                                sleepEnd.setTime(end.getDate().getTime());
+                                sleepTime[0] = sleepStart;
+                                sleepTime[1] = sleepEnd;
+                                sleepTimesList.add(sleepTime);
+                                testLog += "<br>Sleep from " + sleepTime[0].getTime() + " to " + sleepTime[1].getTime();
                             }
+                        }
                         //}
                     }
                 }
@@ -148,6 +150,34 @@ public final class SensorInterpreter {
         for (Calendar[] outTimes : outTimesList) {
             inactivityList.add(outTimes);
         }
+        Collections.sort(sleepTimesList, new Comparator<Calendar[]>() {
+            @Override
+            public int compare(Calendar[] o1, Calendar[] o2) {
+                if (o1[0].getTime().before(o2[0].getTime())) {
+                    return -1;
+                } else if (o1[0].getTime().after(o2[0].getTime())) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        Collections.sort(outTimesList, new Comparator<Calendar[]>() {
+            @Override
+            public int compare(Calendar[] o1, Calendar[] o2) {
+                if (o1[0].getTime().before(o2[0].getTime())) {
+                    return -1;
+                } else if (o1[0].getTime().after(o2[0].getTime())) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        allActivityTable.put("a1", sleepTimesList);
+
+        allActivityTable.put("a3", outTimesList);
         Collections.sort(inactivityList, new Comparator<Calendar[]>() {
             @Override
             public int compare(Calendar[] o1, Calendar[] o2) {
@@ -190,25 +220,25 @@ public final class SensorInterpreter {
                     rowRef[1] = sleepAndOutRowReference.get(i)[0] - 1;
                     activeRowReference.add(rowRef);
                     //System.out.println("a");
-                } else {
-                    /*
-                    System.out.println("b");
-                    Calendar[] activeTimes = new Calendar[2];
-                    Calendar start = Calendar.getInstance();
-                    Calendar end = Calendar.getInstance();
-                    start = readings.get(sleepAndOutRowReference.get(i)[1] + 1).getDate();
-                    end = readings.get(sleepAndOutRowReference.get(i + 1)[0] - 1).getDate();
-                    activeTimes[0] = start;
-                    activeTimes[1] = end;
-                    activityList.add(activeTimes);
-                    Integer[] rowRef = new Integer[2];
-                    rowRef[0] = sleepAndOutRowReference.get(i)[1] + 1;
-                    rowRef[1] = sleepAndOutRowReference.get(i)[0] - 1;
-                    activeRowReference.add(rowRef);
-                
-                    System.out.println("b " + rowRef[0] + " " + rowRef[1]);
-                            */
                 }
+                /*else {
+                    
+                 System.out.println("b");
+                 Calendar[] activeTimes = new Calendar[2];
+                 Calendar start = Calendar.getInstance();
+                 Calendar end = Calendar.getInstance();
+                 start = readings.get(sleepAndOutRowReference.get(i)[1] + 1).getDate();
+                 end = readings.get(sleepAndOutRowReference.get(i + 1)[0] - 1).getDate();
+                 activeTimes[0] = start;
+                 activeTimes[1] = end;
+                 activityList.add(activeTimes);
+                 Integer[] rowRef = new Integer[2];
+                 rowRef[0] = sleepAndOutRowReference.get(i)[1] + 1;
+                 rowRef[1] = sleepAndOutRowReference.get(i)[0] - 1;
+                 activeRowReference.add(rowRef);
+                 System.out.println("b " + rowRef[0] + " " + rowRef[1]);
+                            
+                 } */
             } else if (i == inactivityList.size() - 1) {
                 //System.out.println("d");
                 Calendar[] activeTimes = new Calendar[2];
@@ -222,11 +252,11 @@ public final class SensorInterpreter {
                 activeTimes[1] = end;
                 activityList.add(activeTimes);
                 Integer[] rowRef = new Integer[2];
-                rowRef[0] = sleepAndOutRowReference.get(i-1)[1] + 1;
+                rowRef[0] = sleepAndOutRowReference.get(i - 1)[1] + 1;
                 rowRef[1] = sleepAndOutRowReference.get(i)[0] - 1;
                 activeRowReference.add(rowRef);
                 //System.out.println("d");
-                
+
                 //if the inactivity does not reach end of file. make activity until end of file
                 if (sleepAndOutRowReference.get(i)[1] != readings.size() - 1) {
                     //System.out.println("c");
@@ -245,7 +275,6 @@ public final class SensorInterpreter {
                     //System.out.println("c");
                 }
             } else {
-                System.out.println("f");
                 Calendar[] activeTimes = new Calendar[2];
                 Calendar start = Calendar.getInstance();
                 Calendar end = Calendar.getInstance();
@@ -257,10 +286,9 @@ public final class SensorInterpreter {
                 activeTimes[1] = end;
                 activityList.add(activeTimes);
                 Integer[] rowRef = new Integer[2];
-                rowRef[0] = sleepAndOutRowReference.get(i-1)[1] + 1;
+                rowRef[0] = sleepAndOutRowReference.get(i - 1)[1] + 1;
                 rowRef[1] = sleepAndOutRowReference.get(i)[0] - 1;
                 activeRowReference.add(rowRef);
-                System.out.println("f");
             }
         }
 
@@ -276,21 +304,151 @@ public final class SensorInterpreter {
                 }
             }
         });
-        System.out.println("\n");
-        for (int i = 0; i < activityList.size(); i++){
-            Calendar[] cal = activityList.get(i);
-            Integer[] rows = activeRowReference.get(i);
-            System.out.println("Row " + rows[0] + "-" + rows[1] + ": active from " +
-                    cal[0].getTime() + " to " + cal[1].getTime());
-        }
-        for (int i = 0; i < inactivityList.size(); i++){
+        testLog += "<br><br>-------------------------------------------<br><br>";
+        for (int i = 0; i < inactivityList.size(); i++) {
             Calendar[] cal = inactivityList.get(i);
             Integer[] rows = sleepAndOutRowReference.get(i);
-            System.out.println("Row " + rows[0] + "-" + rows[1] + ": inactive from " +
-                    cal[0].getTime() + " to " + cal[1].getTime());
+            testLog += "<br>Row " + rows[0] + "-" + rows[1] + ": inactive from "
+                    + cal[0].getTime() + " to " + cal[1].getTime();
+        }
+        testLog += "<br><br>-------------------------------------------<br><br>";
+        for (int i = 0; i < activityList.size(); i++) {
+            Calendar[] cal = activityList.get(i);
+            Integer[] rows = activeRowReference.get(i);
+            testLog += "<br>Row " + rows[0] + "-" + rows[1] + ": active from "
+                    + cal[0].getTime() + " to " + cal[1].getTime();
+        }
+        testLog += "<br><br>-------------------------------------------<br><br>";
+
+        //retrieve those sensorreadings that shows elderly is active
+        //filter those readings that show elderly is active for at least 1 hour
+        //for psychomotor calculation
+        ArrayList<SensorReading> readingsToCheck = new ArrayList<SensorReading>();
+
+        for (Integer[] rows : activeRowReference) {
+            //readingsToCheck only holds readings that is more than 0.5 hours
+            readingsToCheck = new ArrayList<SensorReading>();
+            int start = rows[0];
+            int end = rows[1];
+
+            long startTime = readings.get(start).getDate().getTimeInMillis();
+            long endTime = readings.get(end).getDate().getTimeInMillis();
+            //System.out.println(readings.get(start).getDate().getTime());
+            //System.out.println(readings.get(end).getDate().getTime());
+            long diffInMillis = endTime - startTime;
+            //System.out.println(diffInMillis);
+            // assumption every 30 mins interval check for movement
+            if (diffInMillis >= (0.5 * 60 * 60 * 1000)) {
+                for (int j = start; j <= end; j++) {
+                    readingsToCheck.add(readings.get(j));
+                }
+            }
+
+            //do psychomotor checking only if this period last for > 30 minutes (assumption)
+            if (!readingsToCheck.isEmpty()) {
+                //clean up: remove all those rows with all false
+                ArrayList<SensorReading> cleanedReadings = new ArrayList<SensorReading>();
+                for (int i = 0; i < readingsToCheck.size(); i++) {
+                    SensorReading sr = readingsToCheck.get(i);
+                    if (sr.getBathroomPIR() == true || sr.getBed() == true || sr.getBedRoomPIR() == true
+                            || sr.getKitchenPIR() == true
+                            || sr.getLivingRoomPIR() == true) {
+                        cleanedReadings.add(sr);
+                    }
+                }
+
+                boolean change = false;
+                boolean kitchen = false;
+                boolean living = false;
+                boolean bath = false;
+                boolean room = false;
+                ArrayList<Integer> movementCounts = new ArrayList<Integer>();
+                int moveCountPerHour = 0;
+                //time marked is the date that is read
+                Date timeMarked = new Date();
+                //timeCheck is 1/2 hours later
+                Date timeCheck = new Date();
+
+                //bedroom and bed count as bedroom only
+                for (int i = 0; i < cleanedReadings.size(); i++) {
+                    SensorReading sr = cleanedReadings.get(i);
+                    Calendar calTimeCheck = Calendar.getInstance();
+
+                    if (i == 0) {
+                        timeMarked.setTime(sr.getDate().getTimeInMillis());
+                        calTimeCheck.setTime(timeMarked);
+                        calTimeCheck.add(Calendar.MINUTE, 30);
+                        timeCheck.setTime(calTimeCheck.getTimeInMillis());
+                    } else {
+                        //check if readings go past half hour mark
+                        if (sr.getDate().getTime().after(timeCheck)) {
+                            timeMarked.setTime(sr.getDate().getTimeInMillis());
+                            calTimeCheck.setTime(timeMarked);
+                            calTimeCheck.add(Calendar.MINUTE, 30);
+                            timeCheck.setTime(calTimeCheck.getTimeInMillis());
+                            moveCountPerHour = 0;
+                        }
+                    }
+                    
+                    
+                    int count = 0;
+                    if (sr.getBathroomPIR()) {
+                        bath = true;
+                        count++;
+                    }
+                    if (sr.getBed() || sr.getBedRoomPIR()) {
+                        room = true;
+                        count++;
+                    }
+                    if (sr.getKitchenPIR()) {
+                        kitchen = true;
+                        count++;
+                    }
+                    if (sr.getLivingRoomPIR()) {
+                        living = true;
+                        count++;
+                    }
+                    if (count > 1) {
+                        SensorReading next = cleanedReadings.get(i + 1);
+                        boolean kitchen2 = false;
+                        boolean living2 = false;
+                        boolean bath2 = false;
+                        boolean room2 = false;
+                        if (next.getBathroomPIR()) {
+                            bath2 = true;
+                        }
+                        if (next.getBed() || next.getBedRoomPIR()) {
+                            room2 = true;
+                        }
+                        if (next.getKitchenPIR()) {
+                            kitchen2 = true;
+                        }
+                        if (next.getLivingRoomPIR()) {
+                            living2 = true;
+                        }
+
+                        if (living == living2) {
+                            living = false;
+                        }
+                        if (bath == bath2) {
+                            bath = false;
+                        }
+                        if (room == room2) {
+                            room = false;
+                        }
+                        if (kitchen == kitchen2) {
+                            kitchen = false;
+                        }
+
+                    } else { //count ==1
+                    
+                    }
+                }
+            }
         }
 
-        return sleepTimesList;
+        allActivityTable.put(testLog, new ArrayList<Calendar[]>());
+        return allActivityTable;
     }
 
     public static int findAwakeOrInOccurence(ArrayList<SensorReading> readings, int i) {
@@ -302,11 +460,12 @@ public final class SensorInterpreter {
                 return j;
             } else {
                 if (j == readings.size() - 1) {
-                    return j+1;
+                    return j + 1;
                 }
             }
-            
+
         }
+
         return -1;
     }
 

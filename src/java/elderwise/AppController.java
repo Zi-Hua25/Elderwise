@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
 import org.apache.commons.math3.stat.descriptive.*;
 
 
@@ -43,7 +44,7 @@ public final class AppController {
     }
     
     
-    public void bootstrap() throws IOException, FileNotFoundException, ParseException{
+    public static void bootstrap() throws IOException, FileNotFoundException, ParseException{
         elderlyDAO = new ElderlyDAO();
         sensorDAO = new SensorDAO();
         sensorReadingDAO = new SensorReadingDAO(sensorDAO);
@@ -51,10 +52,9 @@ public final class AppController {
         caregiverDAO = new CaregiverDAO();
         doctorDAO = new DoctorDAO();
         
-        Calendar date = Calendar.getInstance();
-        date.set(2015, 9, 1, 0, 0, 0);
         
-        SensorInterpreter.calculateSleepTimings(AppController.getOneDayReadingForElderly(date, "E001"));
+        
+        
         //use sensor intepreter to populate activity class
         //interpretReadings();
 
@@ -83,18 +83,21 @@ public final class AppController {
 
     }
     
-    public static void interpretReadings(){
+    public static Hashtable<String, ArrayList<Calendar[]>> interpretReadings() throws ParseException{
         
         System.out.println("\n--------------------------");
         System.out.println("starting to interpret readings...");
         Long start = System.currentTimeMillis();
         
-        
+        Calendar date = Calendar.getInstance();
+        date.set(2015, 9, 1, 0, 0, 0);
+        Hashtable<String, ArrayList<Calendar[]>> test = SensorInterpreter.analyzeReadings(AppController.getOneDayReadingForElderly(date, "E001"));
         
         
         Long end = System.currentTimeMillis();
         System.out.println("\n--------------------------");
         System.out.println("interpretting ended. Time taken: " + ((end-start)/1000.00) + " seconds.");
+        return test;
     }
     
     public static ArrayList<SensorReading> getOneDayReadingForElderly(Calendar date, String elderlyId) throws ParseException{
