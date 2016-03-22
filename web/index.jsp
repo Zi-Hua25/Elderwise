@@ -27,10 +27,12 @@
     <body>
         <%
             ArrayList<SensorReading> readings = new ArrayList<SensorReading>();
-            
+            AppController app = null;
             if (session.getAttribute("loggedin") == null) {
-                AppController.bootstrap();
-                session.setAttribute("loggedin", true);
+                app = new AppController();
+                session.setAttribute("loggedin", app);
+            } else {
+                app = (AppController)session.getAttribute("loggedin");
             }
 
         %> 
@@ -41,7 +43,7 @@
                     <td>
                         Elderly:
                         <select name="elderlyDropDown" onchange="this.form.submit()">
-                            <%  Hashtable<String, Hashtable<String, ArrayList<SensorReading>>> allReadings = AppController.getAllSensorReadings();
+                            <%  Hashtable<String, Hashtable<String, ArrayList<SensorReading>>> allReadings = app.getAllSensorReadings();
                                 ArrayList<String> keys = new ArrayList<String>();
                                 for (String elderly : allReadings.keySet()) {
                                     keys.add(elderly);
@@ -107,8 +109,8 @@
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd");
             date.setTime(dateFormat.parse(dateSelected));
 
-            readings = AppController.getOneDayReadingForElderly(elderlySelected, date);
-            Activity activity = AppController.getOneActivity(elderlySelected, dateSelected);
+            readings = app.getOneDayReadingForElderly(elderlySelected, date);
+            Activity activity = app.getOneActivity(elderlySelected, dateSelected);
             
             /*Hashtable<String, ArrayList<Calendar[]>> testing = AppController.interpretReadings(date, elderlySelected);
             String testOut = "";
@@ -134,7 +136,14 @@
                 <th>Bathroom</th>
                 <th>Kitchen</th>
                 <td style="padding: 20px;color: blue;" width=50% valign="top" rowspan="<%= readings.size() + 1%>">
-                    <%= activity.getTestPrint() %>
+                    
+                    <font color=green>Insights<br>
+                    Total Sleep Duration: <%= activity.getTotalSleepDuration() %> minutes <br>
+                    Total Out Duration: <%= activity.getTotalOutDuration() %> minutes <br>
+                    Total Sleep Count: <%= activity.getTotalSleepCount() %> times<br>
+                    Total Out Count: <%= activity.getTotalOutCount() %> times<br>
+                    Total Sleep Disturbances <%= activity.getSleepDisturbances()%> times<br></font>
+                    <%= activity.getTestPrint() %><br>
                 </td>
 
             </tr>    

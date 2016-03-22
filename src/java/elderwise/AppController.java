@@ -23,13 +23,13 @@ import org.apache.commons.math3.stat.descriptive.*;
  */
 public final class AppController {
 
-    private static ElderlyDAO elderlyDAO;
-    private static DoctorDAO doctorDAO;
-    private static CaregiverDAO caregiverDAO;
-    private static SensorReadingDAO sensorReadingDAO;
-    private static AppointmentDAO appointmentDAO;
-    private static ActivityDAO activityDAO;
-    private static SensorDAO sensorDAO;
+    private ElderlyDAO elderlyDAO;
+    private DoctorDAO doctorDAO;
+    private CaregiverDAO caregiverDAO;
+    private SensorReadingDAO sensorReadingDAO;
+    private AppointmentDAO appointmentDAO;
+    private ActivityDAO activityDAO;
+    private SensorDAO sensorDAO;
     
 
     public AppController() throws ParseException, IOException {
@@ -46,12 +46,12 @@ public final class AppController {
 
     }
     
-    public static Activity getOneActivity(String elderly, String date){
+    public Activity getOneActivity(String elderly, String date){
         return activityDAO.getActivity(elderly, date);
     }
     
     
-    public static void bootstrap() throws IOException, FileNotFoundException, ParseException{
+    public  void bootstrap() throws IOException, FileNotFoundException, ParseException{
        
             sensorDAO = new SensorDAO();
             elderlyDAO = new ElderlyDAO();
@@ -105,14 +105,14 @@ public final class AppController {
         
     }
     
-    public static ArrayList<SensorReading> getOneDayReadingForElderly(String elderlyId, Calendar date) throws ParseException{
+    public ArrayList<SensorReading> getOneDayReadingForElderly(String elderlyId, Calendar date) throws ParseException{
         return sensorReadingDAO.getSensorReadingsOnDate(elderlyId, date);
     }
     
 
     
-    public static Hashtable<String, Hashtable<String, ArrayList<SensorReading>> >getAllSensorReadings(){
-        System.out.println("hihi");
+    public Hashtable<String, Hashtable<String, ArrayList<SensorReading>> >getAllSensorReadings(){
+        //System.out.println(sensorReadingDAO);
         return sensorReadingDAO.getAllReadings();
     }
     

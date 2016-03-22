@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -47,7 +48,7 @@ public class ActivityDAO {
     //if sleeping and if other PIR sensor got reading, means he left bed
     //if woken up > 30 mins, means woken up
     //if woken up < 30 mins, means sleep disturbance
-    public void analyzeReadings(Hashtable<String, Hashtable<String, ArrayList<SensorReading>>> sensorReadingsTable) {
+    public void analyzeReadings(Hashtable<String, Hashtable<String, ArrayList<SensorReading>>> sensorReadingsTable) throws ParseException {
         //id a1 = sleeping timings
         //id a2 = sleep disturbances timings
         //id a3 = out of home timings
@@ -63,11 +64,13 @@ public class ActivityDAO {
                 
                 // String strDate = format.format(date);
                 Activity activity = new Activity();
+                Calendar thisCal = Calendar.getInstance();
+                thisCal.setTime(format.parse(date));
+                activity.setDate(thisCal);
+                activity.setElderlyId(elderlyId);
                 ArrayList<SensorReading> readings = elderlyTable.get(date);
                 String testLog = "_";
-                Hashtable<String, ArrayList<Calendar[]>> allActivityTable
-                        = new Hashtable<String, ArrayList<Calendar[]>>();
-
+                
                 ArrayList<Calendar[]> sleepTimesList = new ArrayList<Calendar[]>();
                 ArrayList<Calendar[]> outTimesList = new ArrayList<Calendar[]>();
 
@@ -177,6 +180,9 @@ public class ActivityDAO {
                 for (Calendar[] outTimes : outTimesList) {
                     inactivityList.add(outTimes);
                 }
+                activity.setSleepingTimes(sleepTimesList);
+                activity.setOutTimes(outTimesList);
+                
                 Collections.sort(sleepTimesList, new Comparator<Calendar[]>() {
                     @Override
                     public int compare(Calendar[] o1, Calendar[] o2) {
@@ -202,9 +208,7 @@ public class ActivityDAO {
                     }
                 });
 
-                allActivityTable.put("a1", sleepTimesList);
 
-                allActivityTable.put("a3", outTimesList);
                 Collections.sort(inactivityList, new Comparator<Calendar[]>() {
                     @Override
                     public int compare(Calendar[] o1, Calendar[] o2) {
@@ -397,6 +401,7 @@ public class ActivityDAO {
                         //[3] = room
                         boolean[] moveCompare = new boolean[4];
 
+                        ArrayList<Calendar[]> movementTimings = new ArrayList<Calendar[]>();
                         ArrayList<Integer> movementCounts = new ArrayList<Integer>();
                         int moveCountPerHalfHour = 0;
                         //time marked is the date that is read
@@ -496,6 +501,13 @@ public class ActivityDAO {
                                     calTimeCheck.add(Calendar.MINUTE, 30);
                                     timeCheck.setTime(calTimeCheck.getTimeInMillis());
                                     movementCounts.add(moveCountPerHalfHour);
+                                    Calendar[] movementTiming = new Calendar[2];
+                                    movementTiming[0] = Calendar.getInstance();
+                                    movementTiming[1]  = Calendar.getInstance();
+                                    movementTiming[0].setTime(timeMarked);
+                                    movementTiming[1].setTime(timeCheck);
+                                    movementTimings.add(movementTiming);
+                                    
                                     moveCountPerHalfHour = 0;
                                 }
 
@@ -543,7 +555,8 @@ public class ActivityDAO {
                             
 
                         } // end for loop
-
+                        activity.setHalfHourMovementTime(movementTimings);
+                        activity.setHalfHourMovementCount(movementCounts);
                     }// end if
                 }
                 testLog += "<br><br>-------------------------------------------<br><br>";
