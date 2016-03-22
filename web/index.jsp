@@ -4,6 +4,7 @@
     Author     : Terence
 --%>
 
+<%@page import="elderwise.Activity"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="java.util.Comparator"%>
@@ -26,7 +27,7 @@
     <body>
         <%
             ArrayList<SensorReading> readings = new ArrayList<SensorReading>();
-
+            
             if (session.getAttribute("loggedin") == null) {
                 AppController.bootstrap();
                 session.setAttribute("loggedin", true);
@@ -39,7 +40,7 @@
                 <tr>
                     <td>
                         Elderly:
-                        <select name="elderlyDropDown">
+                        <select name="elderlyDropDown" onchange="this.form.submit()">
                             <%  Hashtable<String, Hashtable<String, ArrayList<SensorReading>>> allReadings = AppController.getAllSensorReadings();
                                 ArrayList<String> keys = new ArrayList<String>();
                                 for (String elderly : allReadings.keySet()) {
@@ -65,7 +66,7 @@
                             Hashtable<String, ArrayList<SensorReading>> elderlyReadings = allReadings.get(elderlySelected);
                         %>
                         Date (yyMMdd):
-                        <select name="dateDropDown">
+                        <select name="dateDropDown" onchange="this.form.submit()">
                             <%
                                 SimpleDateFormat formatDate = new SimpleDateFormat("yyMMdd");
                                 ArrayList<Date> keyDates = new ArrayList<Date>();
@@ -96,28 +97,31 @@
                             %>      
                         </select>
                     </td>
-                    <td>
-                        <input type="Submit" value="Go!"></input>
-                    </td>
+
                 </tr>
             </table>
         </form>
-        <font color="red" size="4"><b>Displaying elderly <%= elderlySelected%> data on <%= dateSelected%></b></font><br>
-
-
-        <%
+                        
+                        <%
             Calendar date = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd");
             date.setTime(dateFormat.parse(dateSelected));
 
-            readings = AppController.getOneDayReadingForElderly(date, elderlySelected);
-            Hashtable<String, ArrayList<Calendar[]>> testing = AppController.interpretReadings(date, elderlySelected);
+            readings = AppController.getOneDayReadingForElderly(elderlySelected, date);
+            Activity activity = AppController.getOneActivity(elderlySelected, dateSelected);
+            
+            /*Hashtable<String, ArrayList<Calendar[]>> testing = AppController.interpretReadings(date, elderlySelected);
             String testOut = "";
             for (String s : testing.keySet()) {
                 if (s.contains("_")) {
                     testOut = s;
                 }
-            }%>
+            }*/%>
+            
+            <font color="red" size="4"><b>Displaying elderly <%= elderlySelected%> data on <%= dateSelected%>  (<%= readings.size() %> rows)</b></font><br>
+
+
+        
         <table width = 100%>        
             <tr>
                 <th>Row</th>
@@ -129,8 +133,9 @@
                 <th>Bed</th>
                 <th>Bathroom</th>
                 <th>Kitchen</th>
-                <td style="padding: 40px;color: blue;" width=60% valign="top" rowspan="<%= readings.size() + 1%>">
-                    <%=testOut%></td>
+                <td style="padding: 20px;color: blue;" width=50% valign="top" rowspan="<%= readings.size() + 1%>">
+                    <%= activity.getTestPrint() %>
+                </td>
 
             </tr>    
             <%  int count = 0;

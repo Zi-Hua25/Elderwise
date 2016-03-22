@@ -18,7 +18,14 @@ public class Activity {
     private String activityId;
     private String elderlyId;
     private Calendar date;
-    private String value;
+    private ArrayList<Calendar[]> sleepingTimes;
+    private ArrayList<Calendar[]> outTimes;
+    private int sleepDisturbances;
+    private ArrayList<Calendar[]> halfHourMovementTime;
+    private ArrayList<Integer> halfHourMovementCount;
+    
+    private String testPrint;
+            
 
     //private Calendar[] sleepingTimes;
   
@@ -40,12 +47,43 @@ public class Activity {
     //a9: sleep disturbances (S118), calculate mean of the 30 mins that determine he is asleep. 2XSD is upper and lower. 
     //    find outliers. determines disturbances (every consecutive outlier is 1 disturbance).
 
-    public Activity(String activityId, String elderlyId, Calendar date, String value) {
-        this.activityId = activityId;
-        this.elderlyId = elderlyId;
-        this.date = date;
-        this.value = value;
+    public void setTestPrint(String testPrint) {
+        this.testPrint = testPrint;
     }
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public String getElderlyId() {
+        return elderlyId;
+    }
+
+    public ArrayList<Calendar[]> getSleepingTimes() {
+        return sleepingTimes;
+    }
+
+    public ArrayList<Calendar[]> getOutTimes() {
+        return outTimes;
+    }
+
+    public int getSleepDisturbances() {
+        return sleepDisturbances;
+    }
+
+    public ArrayList<Calendar[]> getHalfHourMovementTime() {
+        return halfHourMovementTime;
+    }
+
+    public ArrayList<Integer> getHalfHourMovementCount() {
+        return halfHourMovementCount;
+    }
+
+    public String getTestPrint() {
+        return testPrint;
+    }
+    
+    
     
     
     

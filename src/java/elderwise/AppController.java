@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.math3.stat.descriptive.*;
 
 
@@ -30,10 +32,11 @@ public final class AppController {
     private static SensorDAO sensorDAO;
     
 
-    public AppController() throws IOException, FileNotFoundException, ParseException {
+    public AppController() throws ParseException, IOException {
         //take note of order
         Long start = System.currentTimeMillis();
         System.out.println("\nsystem started. bootstrap starting.....");
+        
         bootstrap();
         
         Long end = System.currentTimeMillis();
@@ -43,24 +46,29 @@ public final class AppController {
 
     }
     
+    public static Activity getOneActivity(String elderly, String date){
+        return activityDAO.getActivity(elderly, date);
+    }
+    
     
     public static void bootstrap() throws IOException, FileNotFoundException, ParseException{
-        elderlyDAO = new ElderlyDAO();
-        sensorDAO = new SensorDAO();
-        sensorReadingDAO = new SensorReadingDAO(sensorDAO);
-        
-        caregiverDAO = new CaregiverDAO();
-        doctorDAO = new DoctorDAO();
-        
-        
-        
-        
-        //use sensor intepreter to populate activity class
-        //interpretReadings();
+       
+            sensorDAO = new SensorDAO();
+            elderlyDAO = new ElderlyDAO();
+            
+            sensorReadingDAO = new SensorReadingDAO(sensorDAO);
 
-        //read activities and assign to elderly
-        //activityDAO = new ActivityDAO();
-        
+            caregiverDAO = new CaregiverDAO();
+            doctorDAO = new DoctorDAO();
+            
+            activityDAO = new ActivityDAO();
+            activityDAO.analyzeReadings(sensorReadingDAO.getAllReadings());
+            
+            
+           
+         
+            
+  
         //create profile using maybe first 2-weeks of data
         //createProfiles();
         
@@ -83,29 +91,28 @@ public final class AppController {
 
     }
     
-    public static Hashtable<String, ArrayList<Calendar[]>> interpretReadings(Calendar date, String elderlyId) throws ParseException{
+    public static void interpretReadings(Calendar date, String elderlyId){
         
         System.out.println("\n--------------------------");
         System.out.println("starting to interpret readings...");
         Long start = System.currentTimeMillis();
         
-        Hashtable<String, ArrayList<Calendar[]>> test = SensorInterpreter.analyzeReadings(AppController.getOneDayReadingForElderly(date, elderlyId));
+        
 
         Long end = System.currentTimeMillis();
         System.out.println("\n--------------------------");
         System.out.println("interpretting ended. Time taken: " + ((end-start)/1000.00) + " seconds.");
-        return test;
+        
     }
     
-    public static ArrayList<SensorReading> getOneDayReadingForElderly(Calendar date, String elderlyId) throws ParseException{
-        return sensorReadingDAO.getSensorReadingsOnDates(elderlyId, date);
+    public static ArrayList<SensorReading> getOneDayReadingForElderly(String elderlyId, Calendar date) throws ParseException{
+        return sensorReadingDAO.getSensorReadingsOnDate(elderlyId, date);
     }
     
-    public static ArrayList<String> getSensorReadingFilesRead(){
-        return sensorReadingDAO.getFilesNamesRead();
-    }
+
     
     public static Hashtable<String, Hashtable<String, ArrayList<SensorReading>> >getAllSensorReadings(){
+        System.out.println("hihi");
         return sensorReadingDAO.getAllReadings();
     }
     

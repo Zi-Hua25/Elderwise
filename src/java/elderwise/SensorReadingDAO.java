@@ -37,12 +37,13 @@ public class SensorReadingDAO {
     private static final int START_TIME_OF_DAY = 10;
     private ArrayList<SensorReading> sensorReadings;
     //first key is the elderly, second key is the date, without time
-    private Hashtable<String, Hashtable<String, ArrayList<SensorReading>> > sensorReadingTable;
+    private Hashtable<String, Hashtable<String, ArrayList<SensorReading>>> sensorReadingTable;
     private SensorDAO sensorDAO;
     private ArrayList<String> filesNamesRead;
 
     public SensorReadingDAO(SensorDAO sensorDAO) throws IOException, FileNotFoundException, ParseException {
         System.out.println("\n--------------------------");
+        
         sensorReadings = new ArrayList<SensorReading>();
         sensorReadingTable = new Hashtable<String, Hashtable<String, ArrayList<SensorReading>>>();
         this.sensorDAO = sensorDAO;
@@ -55,7 +56,7 @@ public class SensorReadingDAO {
         return sensorReadingTable;
     }
 
-    public ArrayList<SensorReading> getSensorReadingsOnDates(String elderlyId, Calendar date) throws ParseException {
+    public ArrayList<SensorReading> getSensorReadingsOnDate(String elderlyId, Calendar date) throws ParseException {
         if (sensorReadingTable.containsKey(elderlyId)){
             Hashtable<String, ArrayList<SensorReading>> elderlyTable = sensorReadingTable.get(elderlyId);
             DateFormat format = new SimpleDateFormat("yyMMdd");
@@ -73,7 +74,7 @@ public class SensorReadingDAO {
                 return null;
             }
         }
-        System.out.println("ohereereeee");
+        System.out.println(elderlyId);
         return null;
     }
     public Hashtable<Calendar,ArrayList<SensorReading>> getSensorReadingsOnDates(String elderlyId, Calendar start, Calendar end) {
@@ -118,12 +119,14 @@ public class SensorReadingDAO {
         //read CSV file, populate sensor reading dao
         //one file is one elderly for one month (assuming)
         for (String filename : fileNames) {
-            filesNamesRead.add(filename);
+            
             System.out.println("\nreading " + filename + " ....");
             Long start = System.currentTimeMillis();
             String[] splittedValues = filename.split("_");
             String sensorId = splittedValues[2].split("\\.")[0];
             String elderlyId = "";
+            System.out.println("walll");
+            System.out.println(sensorDAO);
             for (Sensor s : sensorDAO.getAllSensors()) {
                 if (s.getSensorId().equals(sensorId)) {
                     elderlyId = s.getElderlyId();
@@ -140,17 +143,18 @@ public class SensorReadingDAO {
                 String[] nextLine;
                 boolean firstRow = true;
                 Date currentDateRead = new Date();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 while ((nextLine = reader.readNext()) != null) {
                     if (!firstRow) {
                         try {
-                            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            //DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                            format.applyPattern("yyyy-MM-dd HH:mm:ss");
+                            
                             String dateRead = nextLine[1];
                             Date date = format.parse(dateRead);
                             Calendar dateCal = Calendar.getInstance();
                             dateCal.setTime(date);
                             
-                            format = new SimpleDateFormat("yyMMdd");
+                            format.applyPattern("yyMMdd");
                             
                             String dateToCheck = format.format(date);
                             
@@ -191,6 +195,7 @@ public class SensorReadingDAO {
             } else {
                 System.out.println("unable to identify which elderly does sensor " + sensorId + " belongs to. Reading file ABORTED");
             }
+            
 
         }
         
@@ -198,9 +203,7 @@ public class SensorReadingDAO {
 
     }
 
-    public ArrayList<String> getFilesNamesRead(){
-        return filesNamesRead;
-    }
+
     /*public void readAllSensorReadingsFromDb(){
 
      Connection conn = null;
