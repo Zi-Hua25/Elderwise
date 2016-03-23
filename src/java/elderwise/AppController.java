@@ -113,7 +113,7 @@ public final class AppController {
     
     public Hashtable<String, Hashtable<String, ArrayList<SensorReading>> >getAllSensorReadings(){
         
-        //test
+        //test development branch
         return sensorReadingDAO.getAllReadings();
     }
     
