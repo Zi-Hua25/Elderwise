@@ -112,6 +112,8 @@ public final class AppController {
 
     
     public Hashtable<String, Hashtable<String, ArrayList<SensorReading>> >getAllSensorReadings(){
+        
+        //test
         return sensorReadingDAO.getAllReadings();
     }
     
